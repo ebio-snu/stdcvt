@@ -1,0 +1,50 @@
+{
+  "version": "1.0.1",
+  "upapi": {
+    "driver": "libup_tp3.so",
+    "option": {
+      "ip": "127.0.0.1",
+      "port": "571213131332"
+    }
+  },
+  "downapi": {
+    "driver": "libdn_company.so",
+    "option": {
+      "port": "/dev/ttyUSB11111"
+    }
+  },
+  "sensors": [
+    {
+      "up": "1",
+      "down": "100"
+    },
+    {
+      "up": "2",
+      "down": "101"
+    },
+    {
+      "up": "3",
+      "down": "102"
+    }
+  ],
+  "motors": [
+    {
+      "up": "11",
+      "down": "200"
+    },
+    {
+      "up": "12",
+      "down": "201"
+    }
+  ],
+  "switch": [
+    {
+      "up": "21",
+      "down": "300"
+    },
+    {
+      "up": "22",
+      "down": "301"
+    }
+  ]
+}

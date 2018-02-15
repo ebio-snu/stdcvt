@@ -1,0 +1,15 @@
+{
+    "sensors" : [
+        {"up" : "1", "upvalue" : 100, "down" : "100", "downvalue" : 100},
+        {"up" : "2", "upvalue" : 100, "down" : "101", "downvalue" : 100},
+        {"up" : "3", "upvalue" : 100, "down" : "102", "downvalue" : 100}
+    ],
+    "motors" : [
+        {"up" : "11", "down" : "200", "current" : 70, "status" : "on"},
+        {"up" : "12", "down" : "201", "current" : 70, "status" : "off"}
+    ],
+    "switch" : [
+        {"up" : "21", "down" : "300", "status" : "on"},
+        {"up" : "22", "down" : "301", "status" : "off"}
+    ]
+}

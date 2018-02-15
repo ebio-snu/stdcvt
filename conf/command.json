@@ -1,0 +1,28 @@
+{
+  "motors": [
+    {
+      "up": "134351",
+      "down": "2004",
+      "target": 100,
+      "command": "on"
+    },
+    {
+      "up": "56",
+      "down": "201",
+      "target": 57,
+      "command": "off"
+    }
+  ],
+  "switch": [
+    {
+      "up": "21",
+      "down": "30011",
+      "command": "on"
+    },
+    {
+      "up": "22",
+      "down": "301",
+      "command": "off"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "version": "1.0.1",
+  "upapi": {
+    "driver": "libup_0288p12.so",
+    "option": {
+      "ip": "127.0.0.1",
+      "port": "2333"
+    }
+  },
+  "downapi": {
+    "driver": "libdn_sample.so",
+    "option": {
+      "port": "/dev/ttyUSB0"
+    }
+  },
+  "sensors": [
+    {
+      "name": "온도",
+      "up": "1",
+      "down": "100"
+    },
+    {
+      "name": "습도",
+      "up": "2",
+      "down": "101"
+    },
+    {
+      "name": "이산화탄소",
+      "up": "3",
+      "down": "102"
+    }
+  ],
+  "motors": [
+    {
+      "name": "좌측창",
+      "up": "11",
+      "down": "200"
+    },
+    {
+      "name": "우측창",
+      "up": "12",
+      "down": "201"
+    }
+  ],
+  "switch": [
+    {
+      "name": "유동팬",
+      "up": "21",
+      "down": "300"
+    },
+    {
+      "name": "환기팬",
+      "up": "22",
+      "down": "301"
+    }
+  ]
+}
