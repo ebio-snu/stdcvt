@@ -3,61 +3,56 @@
 scale 1920*1080
 
 package "StdCvt Driver Template" {
-	class StdCvtDriverFactory <<static>> {
-    	+ StdCvtDriver generate (string configfile);
+    class StdCvtDriverFactory <<static>> {
+       + StdCvtDriver generate (string configfile);
     }
-    
-	abstract class StdCvtDriver {
+
+    abstract class StdCvtDriver {
      - ctrl : Controller
-     
+
      .. Simple Version ..
      + virtual int versionmajor ();
      + virtual int versionminor ();
      + virtual int versionbuild ();
-     
+
      .. Company, Model ..
      + virtual string model ();
      + virtual string company ();
      + virtual int companycode ();
-     
+
      .. Life cycle ..
      + virtual int initialize (string configfile);
      + virtual int finalize ();
      + virtual int process ();
     }
-    
+
     abstract class DeviceManager {
      .. Life cycle ..
      + virtual int initialize();
      + virtual int finalize();
      + virtual int process ();
-     
+
      .. Life cycle ..
      + virtual int getdevicecount ();
     }
-    
+
     class DefaultDeviceManager {
      - devices : Device[]
-     
+
      + int getid (int idx);
      + int getstatus (int idx);
      + int geterrno (int idx);
      + string geterrmsg (int idx);
-     
+
      + int gettype (int idx); // Sensor, Motor, Switch
      + int getsubtype (int idx);
      + int getunit (int idx);
-     
+
      + double getobservation (int deviceid)
     }
-    
-    abstract class VDeviceManager {
-     + virtual int getdevice (int idx);
-    }
-    
+
     DeviceManager <|-- DefaultDeviceManager
-    DeviceManager <|-- VDeviceManager
-    
+
     abstract class Device {
      - id : int
      - status : int
@@ -66,134 +61,133 @@ package "StdCvt Driver Template" {
      - devtype : int
      - subtype : int
      - unit : int
-     
+
      .. Life cycle ..
      + virtual int initialize();
      + virtual int finalize();
      + virtual int process ();
-     
+
      .. Device ID ..
      + virtual int getid ();
-     
+
      .. Device Status ..
      + virtual int getstatus ();
      + virtual int geterrno ();
      + virtual string geterrmsg ();
-     
+
      .. Device Type ..
      + virtual int gettype (); // Sensor, Motor, Switch, Controller
      + virtual int getsubtype ();
      + virtual int getunit ();
     }
-    
+
     class Controller {
      - devids : int[]
      + int getdevicecount();
      + int getdeviceid(int idx);
     }
-    
+
     class Sensor {
      + double getobservation ();
     }
-    
+
     class Motor {
      + double getposition ();
      + int setposition (double position);
      + int setaction (int stat, int sec);
      + int setstop ();
     }
-     
+
     class Switch {
      + int setaction (int stat, int sec);
-     + int seton ();     
+     + int seton ();
      + int setoff ();
     }
-    
+
     Device <|-- Controller
     Device <|-- Sensor
     Device <|-- Motor
     Device <|-- Switch
-    
-   
-    VDeviceManager *-- Sensor
-    VDeviceManager *-- Motor
-    VDeviceManager *-- Switch
-   
+
+    DeviceManager *-- Sensor
+    DeviceManager *-- Motor
+    DeviceManager *-- Switch
+
     StdCvtDriver *-- DeviceManager
 }
 
-package "StdCvtDriver for A Company" #DDDDDD {  
+package "StdCvtDriver for A Company" #DDDDDD {
     class ACompStdCvtDriver {
      - conn : fd
     }
-    
+
     StdCvtDriver <|-- ACompStdCvtDriver
-    
-    
-	class ACompSensorManager {
+
+
+    class ACompSensorManager {
      - devids : int[]
      - cnt : integer
      + void setobservation (int idx, double value);
      + void setstatus (int idx, int status);
     }
-    
+
     class ACompMotorManager {
      - devids : integer[]
-     - cnt : integer    
-     + void setstatus (int idx, int status, double currentposition); 
+     - cnt : integer
+     + void setstatus (int idx, int status, double currentposition);
     }
-    
+
     class ACompSwitchManager {
      - devids : integer[]
      - cnt : integer
-     + void setstatus (int idx, int status); 
+     + void setstatus (int idx, int status);
     }
-    
-    DeviceManager <|-- ACompSensorManager  
+
+    DeviceManager <|-- ACompSensorManager
     DeviceManager <|-- ACompMotorManager
     DeviceManager <|-- ACompSwitchManager
-    
+
     ACompStdCvtDriver *-- ACompSensorManager
     ACompStdCvtDriver *-- ACompMotorManager
     ACompStdCvtDriver *-- ACompSwitchManager
 }
 
 
-package "StdCvtDriver for B Company" #DDDDDD {  
+package "StdCvtDriver for B Company" #DDDDDD {
     class BCompStdCvtDriver {
      - conn : fd
     }
-    
+
     StdCvtDriver <|-- BCompStdCvtDriver
-    
-    
-	class BCompSensor {
+
+
+    class BCompSensor {
      + void setobservation (double value);
      + void setstatus (int status);
     }
-    
-    class BCompMotor {  
-     + void setstatus (int status, double currentposition); 
+
+    class BCompMotor {
+     + void setstatus (int status, double currentposition);
     }
-    
+
     class BCompSwitch {
-     + void setstatus (int status); 
+     + void setstatus (int status);
     }
-    
-    Sensor <|-- BCompSensor  
+
+    Sensor <|-- BCompSensor
     Motor <|-- BCompMotor
     Switch <|-- BCompSwitch
-    
+
     class BCompDeviceManager {
      - devices : Device[]
     }
-    
+
     BCompDeviceManager *-- BCompSensor
     BCompDeviceManager *-- BCompMotor
     BCompDeviceManager *-- BCompSwitch
-    
-    VDeviceManager <|-- BCompDeviceManager
-    
+
+    DeviceManager <|-- BCompDeviceManager
+
     BCompStdCvtDriver *-- BCompDeviceManager
 }
 @enduml

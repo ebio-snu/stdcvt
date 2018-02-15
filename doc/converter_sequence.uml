@@ -1,0 +1,139 @@
+@startuml
+
+== Initialization ==
+main -> converter : new converter ()
+activate converter #FFBBBB
+main -> converter : initialize (config_directory)
+activate converter
+converter -> converter : loadconfig (config_directory)
+converter -> downdriver : new downdriver ()
+activate downdriver #FFBBBB
+converter -> downdriver : initialize (option)
+activate downdriver
+downdriver -> converter : true or false
+destroy downdriver
+
+loop until NoDeviceException
+  converter -> downdriver : getsensor(index)
+  activate downdriver
+  downdriver -> converter : Sensor
+  destroy downdriver
+end
+loop until NoDeviceException
+  converter -> downdriver : getmotor(index)
+  activate downdriver
+  downdriver -> converter : Motor
+  destroy downdriver
+end
+loop until NoDeviceException
+  converter -> downdriver : getswitch(index)
+  activate downdriver
+  downdriver -> converter : Switch
+  destroy downdriver
+end
+
+converter -> updriver : new updriver ()
+activate updriver #FFBBBB
+converter -> updriver : initialize (option)
+activate updriver
+updriver -> converter : true or false
+destroy updriver
+converter -> main : true or false
+destroy converter
+
+... time delay ...
+== Processing ==
+main -> converter : wakeup ()
+activate converter
+converter -> downdriver : process()
+activate downdriver
+downdriver -> converter : true or false
+destroy downdriver
+
+note over converter
+  Reading Observations
+end note
+loop until NoDeviceException
+  converter -> downdriver : readobservations(index)
+  activate downdriver
+  downdriver -> converter : value(double)
+  destroy downdriver
+  converter -> converter : saveobservations
+end
+
+loop until NoDeviceException
+converter -> updriver : writeobservations(id, value)
+activate updriver
+updriver -> converter : true or false
+destroy updriver
+end
+
+note over converter
+  Processing Commands
+end note
+converter -> converter : loadcommands()
+loop until NoDeviceException
+  converter -> downdriver : getmotor(index)
+  activate downdriver
+  downdriver -> converter : value(double)
+  destroy downdriver
+  alt target_position is not matched
+    converter -> downdriver : setposition (index, position)
+    activate downdriver
+    downdriver -> converter : true or false
+    destroy downdriver
+  end
+end
+loop until NoDeviceException
+converter -> updriver : writeposition(id, stat, current_position)
+activate updriver
+updriver -> converter : true or false
+destroy updriver
+end
+
+
+loop until NoDeviceException
+  converter -> downdriver : getswitch(index)
+  activate downdriver
+  downdriver -> converter : Switch
+  destroy downdriver
+  alt status is not matched
+    converter -> downdriver : setaction(index, stat, time)
+    activate downdriver
+    downdriver -> converter : true or false
+    destroy downdriver
+  end
+end
+loop until NoDeviceException
+converter -> updriver : writestatus(id, stat)
+activate updriver
+updriver -> converter : true or false
+destroy updriver
+end
+
+
+converter -> main : true or false
+destroy converter
+... sleep ...
+
+== Finalization ==
+... kill signal ...
+main -> converter : finalize ()
+activate converter
+converter -> updriver : finalize ()
+activate updriver
+updriver -> converter : true or false
+destroy updriver
+converter -> updriver : delete
+destroy updriver
+converter -> downdriver : finalize ()
+activate downdriver
+downdriver -> converter : true or false
+destroy downdriver
+converter -> downdriver : delete
+destroy downdriver
+destroy converter
+main -> converter : delete
+destroy converter
+
+@enduml
