@@ -3,191 +3,128 @@
 scale 1920*1080
 
 package "StdCvt Driver Template" {
-    class StdCvtDriverFactory <<static>> {
-       + StdCvtDriver generate (string configfile);
+    class CvtOption {
+        + string readconfig (string key)
+        .. Jasson Wrapper ..
     }
 
-    abstract class StdCvtDriver {
-     - ctrl : Controller
+    class CvtDriverFactory <<static>> {
+        + CvtDriver generate (string configfile);
+    }
 
-     .. Simple Version ..
-     + virtual int versionmajor ();
-     + virtual int versionminor ();
-     + virtual int versionbuild ();
+    enum stat_t {
+      ON
+      OFF
+      OPEN
+      CLOSE
+      STOP
+    }
 
-     .. Company, Model ..
-     + virtual string model ();
-     + virtual string company ();
-     + virtual int companycode ();
+    enum devtype_t {
+      SENSOR
+      MOTOR
+      SWITCH
+    }
+
+    enum unit_t {
+      PERCENTAGE
+      CELCIUS
+      ...
+    }
+
+    abstract class CvtDriver {
+     - Device devices[]
+
+     .. Company, Model, Simple Version ..
+     + virtual string getversion ();
+     + virtual string getmodel ();
+     + virtual string getcompany ();
+     + virtual int getcompanycode ();
+     + virtual int getmodelcode ();
 
      .. Life cycle ..
-     + virtual int initialize (string configfile);
+     + virtual int initialize (StdCvtOption option);
      + virtual int finalize ();
-     + virtual int process ();
+     + virtual int preprocess (); // read sensor data, read commands
+     + virtual int postprocess (); // write sensor data, execute commands
+
+     .. Process ..
+     + virtual Device getdevice (int index);
     }
-
-    abstract class DeviceManager {
-     .. Life cycle ..
-     + virtual int initialize();
-     + virtual int finalize();
-     + virtual int process ();
-
-     .. Life cycle ..
-     + virtual int getdevicecount ();
-    }
-
-    class DefaultDeviceManager {
-     - devices : Device[]
-
-     + int getid (int idx);
-     + int getstatus (int idx);
-     + int geterrno (int idx);
-     + string geterrmsg (int idx);
-
-     + int gettype (int idx); // Sensor, Motor, Switch
-     + int getsubtype (int idx);
-     + int getunit (int idx);
-
-     + double getobservation (int deviceid)
-    }
-
-    DeviceManager <|-- DefaultDeviceManager
 
     abstract class Device {
      - id : int
-     - status : int
+     - status : stat_t
      - errno : int
      - errmsg : string
-     - devtype : int
-     - subtype : int
-     - unit : int
-
-     .. Life cycle ..
-     + virtual int initialize();
-     + virtual int finalize();
-     + virtual int process ();
+     - devtype : devtype_t
+     - unit : unit_t
 
      .. Device ID ..
      + virtual int getid ();
 
      .. Device Status ..
-     + virtual int getstatus ();
+     + virtual stat_t getstatus ();
      + virtual int geterrno ();
      + virtual string geterrmsg ();
 
      .. Device Type ..
-     + virtual int gettype (); // Sensor, Motor, Switch, Controller
-     + virtual int getsubtype ();
-     + virtual int getunit ();
-    }
+     + virtual devtype_t gettype (); // Sensor, Motor, Switch, Controller
+     + virtual unit_t getunit ();
+     + virtual unit_t setunit (unit_t unit);
 
-    class Controller {
-     - devids : int[]
-     + int getdevicecount();
-     + int getdeviceid(int idx);
+     .. Data Flow ..
+     + virtual bool stream(Device downdevice);
     }
 
     class Sensor {
-     + double getobservation ();
+     + double writeobservation (double value);
+     + double readobservation ();
+     + bool stream(Sensor down);
     }
 
     class Motor {
-     + double getposition ();
+     + double getcurrentposition ();
+     + double gettargetposition ();
      + int setposition (double position);
-     + int setaction (int stat, int sec);
      + int setstop ();
+     + bool stream(Motor down);
     }
 
     class Switch {
-     + int setaction (int stat, int sec);
      + int seton ();
      + int setoff ();
+     + bool stream(Switch down);
     }
 
-    Device <|-- Controller
     Device <|-- Sensor
     Device <|-- Motor
     Device <|-- Switch
 
-    DeviceManager *-- Sensor
-    DeviceManager *-- Motor
-    DeviceManager *-- Switch
-
-    StdCvtDriver *-- DeviceManager
+    CvtDriver *-- Device
 }
 
-package "StdCvtDriver for A Company" #DDDDDD {
-    class ACompStdCvtDriver {
-     - conn : fd
+package "CvtDriver for B Company" #DDDDDD {
+    class BCompCvtDriver {
     }
 
-    StdCvtDriver <|-- ACompStdCvtDriver
-
-
-    class ACompSensorManager {
-     - devids : int[]
-     - cnt : integer
-     + void setobservation (int idx, double value);
-     + void setstatus (int idx, int status);
-    }
-
-    class ACompMotorManager {
-     - devids : integer[]
-     - cnt : integer
-     + void setstatus (int idx, int status, double currentposition);
-    }
-
-    class ACompSwitchManager {
-     - devids : integer[]
-     - cnt : integer
-     + void setstatus (int idx, int status);
-    }
-
-    DeviceManager <|-- ACompSensorManager
-    DeviceManager <|-- ACompMotorManager
-    DeviceManager <|-- ACompSwitchManager
-
-    ACompStdCvtDriver *-- ACompSensorManager
-    ACompStdCvtDriver *-- ACompMotorManager
-    ACompStdCvtDriver *-- ACompSwitchManager
-}
-
-
-package "StdCvtDriver for B Company" #DDDDDD {
-    class BCompStdCvtDriver {
-     - conn : fd
-    }
-
-    StdCvtDriver <|-- BCompStdCvtDriver
-
+    CvtDriver <|-- BCompCvtDriver
 
     class BCompSensor {
-     + void setobservation (double value);
-     + void setstatus (int status);
     }
 
     class BCompMotor {
-     + void setstatus (int status, double currentposition);
     }
 
     class BCompSwitch {
-     + void setstatus (int status);
     }
 
     Sensor <|-- BCompSensor
     Motor <|-- BCompMotor
     Switch <|-- BCompSwitch
 
-    class BCompDeviceManager {
-     - devices : Device[]
-    }
-
-    BCompDeviceManager *-- BCompSensor
-    BCompDeviceManager *-- BCompMotor
-    BCompDeviceManager *-- BCompSwitch
-
-    DeviceManager <|-- BCompDeviceManager
-
-    BCompStdCvtDriver *-- BCompDeviceManager
+    BCompCvtDriver *-- BCompSensor
+    BCompCvtDriver *-- BCompMotor
+    BCompCvtDriver *-- BCompSwitch
 }
 @enduml
