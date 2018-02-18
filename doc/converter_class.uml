@@ -38,13 +38,17 @@ package "StdCvt Driver Template" {
 
      .. Device Status ..
      + virtual stat_t getstatus ();
-     + virtual int geterrno ();
+     + virtual errno_t geterrno ();
      + virtual string geterrmsg ();
 
      .. Device Type ..
      + virtual devtype_t gettype (); // Sensor, Motor, Switch, Controller
      + virtual unit_t getunit ();
      + virtual unit_t setunit (unit_t unit);
+
+     .. Device Location ..
+     + virtual location_t getlocation (); // installation position
+     + virtual location_t setlocation (location_t loc); // installation position
 
      .. Data Flow ..
      + virtual bool stream(Device downdevice);
