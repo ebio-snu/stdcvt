@@ -1,0 +1,23 @@
+@startuml
+
+package "Farm" {
+Sensor --> [SensorNode]
+[SensorNode] -> [Controller]
+[ActuatorNode] -> [Controller]
+Actuator --> [ActuatorNode]
+}
+
+package "Converter" {
+[SensorNode] --> [DownDriver]
+[ActuatorNode] --> [DownDriver]
+[Controller] --> [DownDriver]
+[DownDriver] -> [Converter]
+[Converter] -> [UpDriver]
+
+}
+
+cloud "DataServer" {
+[UpDriver] -> [DataCollector]
+}
+
+@enduml

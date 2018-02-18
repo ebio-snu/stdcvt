@@ -24,9 +24,31 @@ destroy converter
 
 ... time delay ...
 == Processing ==
+alt message arrival to downdriver
 note over main
-  timeout, message arrival
+  message arrival to downdriver
 end note
+main -> downdriver : wakeup ()
+activate downdriver
+downdriver -> downdriver : processmessage ()
+downdriver -> main : ture or false
+destroy downdriver
+...
+else message arrival to updriver
+note over main
+  message arrival to updriver
+end note
+main -> updriver : wakeup ()
+activate updriver
+updriver -> updriver : processmessage ()
+updriver -> main : ture or false
+destroy updriver
+...
+else timeout
+note over main
+  timeout
+end note
+end
 main -> converter : wakeup ()
 activate converter
 converter -> downdriver : preprocess()
@@ -54,7 +76,6 @@ loop until NoDeviceException(downdriver.getdevice)
   activate updriver
   updriver -> converter : updevice
   destroy updriver
-  converter -> converter : updevice.stream(downdevice)
 end
 
 converter -> downdriver : postprocess()
