@@ -101,36 +101,4 @@ package "CvtDriver for B Company" #DDDDDD {
     BCompCvtDriver *-- BCompSwitch
 }
 
-package "StdCvt" {
-    class CvtConfig{
-        + string readconfig (string key)
-        .. Jasson Wrapper ..
-    }
-
-    class Converter {
-        + CvtDriver generate (CvtConfig config);
-    
-    }
-
-    enum stat_t {
-      ON
-      OFF
-      OPEN
-      CLOSE
-      STOP
-    }
-
-    enum devtype_t {
-      SENSOR
-      MOTOR
-      SWITCH
-    }
-
-    enum unit_t {
-      PERCENTAGE
-      CELCIUS
-      ...
-    }
-}
-
 @enduml
