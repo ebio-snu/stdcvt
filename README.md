@@ -56,6 +56,7 @@
 * [장비 설치위치](doc/device_location.md)
 * [관측치 단위](doc/observation_unit.md)
 * [에러코드](doc/error_number.md)
+* [개발사번호](doc/manufacturer.md)
 
 ## 샘플노드 사용법
 앞으로 추가될 예정입니다.

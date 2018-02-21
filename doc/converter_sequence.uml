@@ -76,6 +76,7 @@ loop until NoDeviceException(downdriver.getdevice)
   activate updriver
   updriver -> converter : updevice
   destroy updriver
+  converter -> converter : updevice.stream(downdevice)
 end
 
 converter -> downdriver : postprocess()
