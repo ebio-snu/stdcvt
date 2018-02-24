@@ -25,60 +25,65 @@ package "StdCvt Driver Template" {
      + virtual Device getdevice (int index);
     }
 
-    abstract class Device {
+    abstract class CvtDevice {
      - id : int
-     - status : stat_t
+     - status : devstat_t
+     - devtype : devtype_t
      - errno : int
      - errmsg : string
-     - devtype : devtype_t
-     - unit : unit_t
+
+     - bool copyproperites (CvtDevice *pdevice);
 
      .. Device ID ..
-     + virtual int getid ();
+     + int getid ();
 
      .. Device Status ..
-     + virtual stat_t getstatus ();
-     + virtual errno_t geterrno ();
-     + virtual string geterrmsg ();
+     + devstat_t getstatus ();
+     + errno_t geterrno ();
+     + string geterrmsg ();
 
      .. Device Type ..
-     + virtual devtype_t gettype (); // Sensor, Motor, Switch, Controller
-     + virtual unit_t getunit ();
-     + virtual unit_t setunit (unit_t unit);
+     + devtype_t gettype (); // Sensor, Motor, Switch, Controller
 
      .. Device Location ..
-     + virtual location_t getlocation (); // installation position
-     + virtual location_t setlocation (location_t loc); // installation position
+     + location_t getlocation (); // installation position
+     + location_t setlocation (location_t loc); // installation position
 
      .. Data Flow ..
-     + virtual bool stream(Device downdevice);
+     + virtual bool stream(CvtDevice *pdevice);
     }
 
-    class Sensor {
+    virtual class CvtSensor {
+     - unit : obsunit_t
+     - value : double
+     - bool copyproperites (CvtDevice *pdevice);
+
+     + obsunit_t getunit ();
+     + obsunit_t setunit (obsunit_t unit);
      + double writeobservation (double value);
      + double readobservation ();
-     + bool stream(Sensor down);
     }
 
-    class Motor {
+    class CvtMotor {
      + double getcurrentposition ();
      + double gettargetposition ();
      + int setposition (double position);
      + int setstop ();
      + bool stream(Motor down);
+     + virtual bool stream(Sensor down);
     }
 
-    class Switch {
+    class CvtSwitch {
      + int seton ();
      + int setoff ();
      + bool stream(Switch down);
     }
 
-    Device <|-- Sensor
-    Device <|-- Motor
-    Device <|-- Switch
+    CvtDevice <|-- CvtSensor
+    CvtDevice <|-- CvtMotor
+    CvtDevice <|-- CvtSwitch
 
-    CvtDriver *-- Device
+    CvtDriver *-- CvtDevice
 }
 
 package "CvtDriver for B Company" #DDDDDD {
