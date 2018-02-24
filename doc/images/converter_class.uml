@@ -2,27 +2,43 @@
 
 scale 1920*1080
 
-
 package "StdCvt Driver Template" {
 
     abstract class CvtDriver {
-     - Device devices[]
+     - modelcode : int 
+     - apiver : int
 
      .. Company, Model, Simple Version ..
+     + int getmodelcode ();     // company code + model code
+     + int getapiversion ();
+
      + virtual string getversion ();
      + virtual string getmodel ();
      + virtual string getcompany ();
-     + virtual int getcompanycode ();
-     + virtual int getmodelcode ();
 
      .. Life cycle ..
      + virtual int initialize (CvtConfig option);
      + virtual int finalize ();
      + virtual int preprocess (); // read sensor data, read commands
      + virtual int postprocess (); // write sensor data, execute commands
-     + virtual int processmessage ();
+
      .. Process ..
      + virtual Device getdevice (int index);
+    }
+
+    abstract class CvtSerialDriver {
+     - fd : int
+     + virtual int processmessage ();
+    }
+
+    abstract class CvtTcpServerDriver {
+     - socket : int(Socket)
+     + virtual int processmessage ();
+    }
+
+    abstract class CvtTcpClientDriver {
+     - socket : int(Socket)
+     + virtual int processmessage ();
     }
 
     abstract class CvtDevice {
@@ -64,19 +80,16 @@ package "StdCvt Driver Template" {
      + double readobservation ();
     }
 
-    class CvtMotor {
+    virtual class CvtMotor {
      + double getcurrentposition ();
      + double gettargetposition ();
      + int setposition (double position);
      + int setstop ();
-     + bool stream(Motor down);
-     + virtual bool stream(Sensor down);
     }
 
-    class CvtSwitch {
+    virtual class CvtSwitch {
      + int seton ();
      + int setoff ();
-     + bool stream(Switch down);
     }
 
     CvtDevice <|-- CvtSensor
