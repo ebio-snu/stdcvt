@@ -4,6 +4,7 @@
 * [장비 상태](code/device_status.md)
 * [장비 종류](code/device_type.md)
 * [장비 설치 구역](code/device_section.md)
+* [장비 작동 대상](code/device_target.md)
 * [관측치 단위](code/observation_unit.md)
 * [에러코드](code/error_number.md)
 * [개발사번호](code/manufacturer.md)
