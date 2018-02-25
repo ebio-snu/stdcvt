@@ -9,6 +9,11 @@
  refer from: https://github.com/ebio-snu/stdcvt
 */
 
+#ifndef _CVT_DEVICE_
+#define _CVT_DEVICE_
+
+namespace stdcvt {
+
 /*
  @brief CvtDevice is a virtual class for a smartfarm device.
 */
@@ -17,6 +22,8 @@ private:
     int _id;                //< 장비 ID
     devtype_t _type;        //< 장비 종류
     devstat_t _status;      //< 장비 상태
+    devsec_t _section;      //< 장비 설치 구역
+    devtarget_t _target;    //< 장비의 대상
 
 protected:
     /**
@@ -155,3 +162,6 @@ public:
     }
     */
 };
+
+} // namespace stdcvt
+#endif

@@ -12,23 +12,25 @@
 #ifndef _CVT_DRIVER_
 #define _CVT_DRIVER_
 
+namespace stdcvt {
+
 /*
  @brief CvtDriver is a virtual class for a converter driver.
 */
 virtual class CvtDriver {
 private:
     int _modelcode;         //< 모델코드. 회사코드에 개별모델의 번호를 합하여 만든다.
-    int _apiver;            //< 적용API버전. API 버전에 따라 메소드구성에 차이가 있을 수 있다.
+    int _apispec;            //< 적용API버전. API 버전에 따라 메소드구성에 차이가 있을 수 있다.
 
 public:
     /**
      새로운 드라이버를 생성한다.
      @param modelcode 모델코드
-     @param apiver API 버전
+     @param apispec API 버전
     */
-    CvtDriver(int modelcode, int apiver) {
+    CvtDriver(int modelcode, int apispec) {
         _modelcode = modelcode;
-        _apiver = apiver;
+        _apispec = apispec;
     }
 
     ~CvtDriver();
@@ -45,20 +47,21 @@ public:
      드라이버의 API 버전을 확인한다.
      @return 드라이버의 API 버전
     */
-    int getapiver() {
-        return _apiver;
+    int getapispec() {
+        return _apispec;
     }
 
     /**
      드라이버 제작자가 부여하는 버전번호를 확인한다.
      컨버터에서는 해당 버전을 로깅용도로만 사용한다.
+     문자열 비교를 통해 후순위가 더 높은 버전이 된다.
      @return 문자열 형식의 버전번호
     */
     virtual string getversion ();
 
     /**
      드라이버 제작자가 부여하는 모델번호를 확인한다.
-     컨버터에서는 모델코드만 확인하고, 모델번호에 대해서는 로깅용도로만 사용한다. 
+     컨버터에서는 모델코드만 확인하고, 모델번호에 대해서는 로깅용도로만 사용한다.
      @return 문자열 형식의 모델번호
     */
     virtual string getmodel ();
@@ -78,7 +81,7 @@ public:
     virtual bool initialize (CvtConfig option);
 
     /**
-     드라이버를 종료한다. 
+     드라이버를 종료한다.
      @return 종료 성공 여부
     */
     virtual bool finalize ();
@@ -103,12 +106,6 @@ public:
     virtual CvtDevice *getdevice(int index);
 };
 
-virtual class CvtSerialDriver : public class CvtDriver {
-};
-
-virtual class CvtTcpDriver : public class CvtDriver {
-};
-
+} // namespace stdcvt
 
 #endif
-
