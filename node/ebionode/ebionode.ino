@@ -46,7 +46,7 @@ void monitor () {
   if (enode.getdisplayvalue(2) == 0)
     lcd.print("Off");
   else
-    lcd.print("On");
+    lcd.print("On ");
   lcd.setCursor(7,1);
   lcd.print(" SE: ");
   lcd.setCursor(11,1);
