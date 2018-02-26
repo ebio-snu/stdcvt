@@ -49,6 +49,8 @@
 
 * [컨버터 작동 원리](doc/converter.md)
 * [컨버터 사용법](doc/usage_converter.md)
+* [샘플노드 사용법](node/README.md)
+* [샘플노드 프로토콜](doc/samplenode_protocol.md)
 
 드라이버와 관련된 내용은 [드라이버 저장소](https://github.com/ebio-snu/cvtdriver)를 참고 한다.  
 
