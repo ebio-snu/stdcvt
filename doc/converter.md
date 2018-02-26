@@ -36,3 +36,47 @@
 1. (**중요**) 드라이버에서 대기모드로 돌입하는 것은 불가하다. (sleep, select 등)
 1. (**논의**) 개별 드라이버가 내부적으로 별도의 스레드를 돌리거나 통신을 수행하는 별도의 프로세스를 작동시키고, 내부통신방법(공유메모리 등)을 사용하는 것은 가능하다. 이 경우 전/후처리 메소드(preprocess, postprocess)를 활용하면 된다.
 1. (**논의**) 이벤트라이브러리 (libuv 등)을 활용하여 메세지 처리용 메소드(processmessage)를 호출해주는 방법도 가능하다.
+
+## 컨버터의 설치
+
+컨버터는 최대한 특정OS에 종속되지 않도록 개발하려고 한다. 다만, 현 상태에서 사용성, 개별편의 등을 고려하여 라즈베리파이3를 기본 하드웨어로 하고 Raspbian을 기본OS로 하여 개발을 진행하고 있다. 컨버터의 설치를 위해 라즈베리파이3 및 Raspbian은 설치가 되어 있다고 가정한다.
+
+### 초기 패키지 업데이트
+```
+sudo apt update
+sudo apt upgrade
+```
+
+### 필요한 패키지의 설치
+* 소스 코드의 획득
+```
+sudo apt install git
+git clone https://github.com/ebio-snu/stdcvt.git
+cd stdcvt
+git submodule init
+git submodule update
+```
+
+* Test UI를 위한 NodeJS
+```
+curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+* 빌드를 위한 패키지 설치
+```
+sudo apt install build-essential cmake libgoogle-glog-dev libasio-dev libjansson-dev
+```
+
+* 소스코드 업데이트 및 빌드
+```
+cd stdcvt
+git pull
+git submodule 
+mkdir build
+cd testui
+npm install
+cd ../build
+cmake ..
+make
+```

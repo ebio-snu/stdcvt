@@ -42,22 +42,22 @@
 프로젝트 진행을 위해 다음과 같은 문서화가 진행되고 있다.
 
 * [컨버터 작동 원리](doc/converter.md)
-* [드라이버 API](doc/driver_api.md)
-* [코드표](doc/code_table.md)
 * [컨버터 사용법](doc/usage_converter.md)
 
+드라이버와 관련된 내용은 [드라이버 저장소](https://github.com/ebio-snu/cvtdriver)를 참고 한다.  
 
 ## 개발관련 공통사항
 * 라이브러리
-  * [google glog](https://github.com/google/glog) : 로깅라이브러리
-  * [jasson](http://www.digip.org/jansson/) : JSON 라이브러리
-  * [libuv](https://github.com/libuv/libuv) : Cross-platform asynchronous I/O library
-  * [serial](https://github.com/wjwwood/serial) : Cross-platform Serial library
+  * [google glog](https://github.com/google/glog) : Google 에서 공개한 로깅라이브러리
+  * [jasson](http://www.digip.org/jansson) : JSON 라이브러리
+  * [Boost](http://www.boost.org/) : asio와 dll을 주로 사용
   * 개별 드라이버 개발을 위해 필요한 라이브러리를 사용할 수 있다.
 
 * 개발환경
+  * g++ : 기본 설정으로 g++을 사용. VC에서 테스트되지는 않았지만 큰 문제는 없을것으로 기대.
   * cmake
-  * g++
+  * mysql-5.5
+  * nodejs : Test UI를 위한 환경
 
 * 개발문서
   * doxygen
