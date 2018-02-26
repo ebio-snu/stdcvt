@@ -37,6 +37,12 @@
 ## 프로젝트 참여사
 다음의 업체들이 현재 참여의사를 밝히고 공동 개발을 진행하고 있다. (가나다순)
 
+1. 그리심산업
+1. 린캔들라이트
+1. 메디앙시스템
+1. 제닉스시스템
+1. 코리아디지탈
+
 
 ## 프로젝트 문서
 프로젝트 진행을 위해 다음과 같은 문서화가 진행되고 있다.
@@ -49,7 +55,7 @@
 ## 개발관련 공통사항
 * 라이브러리
   * [google glog](https://github.com/google/glog) : Google 에서 공개한 로깅라이브러리
-  * [jasson](http://www.digip.org/jansson) : JSON 라이브러리
+  * [jansson](http://www.digip.org/jansson) : JSON 라이브러리
   * [Boost](http://www.boost.org/) : asio와 dll을 주로 사용
   * 개별 드라이버 개발을 위해 필요한 라이브러리를 사용할 수 있다.
 
