@@ -5,19 +5,28 @@ Sensor --> [SensorNode]
 [SensorNode] -> [Controller]
 [ActuatorNode] -> [Controller]
 Actuator --> [ActuatorNode]
+[SensorNode-1]
+[ActuatorNode-1]
+[Controller-1]
 }
 
 package "Converter" {
-[SensorNode] --> [DownDriver]
-[ActuatorNode] --> [DownDriver]
-[Controller] --> [DownDriver]
-[DownDriver] -> [Converter]
-[Converter] -> [UpDriver]
+[SensorNode] --> [DSDriver]
+[ActuatorNode] --> [DSDriver]
+[Controller] --> [DSDriver]
+[SensorNode-1] --> [DSDriver-1]
+[ActuatorNode-1] --> [DSDriver-1]
+[Controller-1] --> [DSDriver-1]
+[DSDriver] --> [Converter]
+[DSDriver-1] --> [Converter]
+[DSDriver] -> [DSDriver-1]
+[DSDriver] <- [DSDriver-1]
+[Converter] --> [SSDriver]
 
 }
 
 cloud "DataServer" {
-[UpDriver] -> [DataCollector]
+[SSDriver] -> [DataCollector]
 }
 
 @enduml

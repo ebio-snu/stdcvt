@@ -6,43 +6,43 @@ activate converter #FFBBBB
 main -> converter : initialize (config_directory)
 activate converter
 converter -> converter : loadconfig (config_directory)
-converter -> downdriver : new downdriver ()
-activate downdriver #FFBBBB
-converter -> downdriver : initialize (option)
-activate downdriver
-downdriver -> converter : true or false
-destroy downdriver
+converter -> dsdriver : new dsdriver ()
+activate dsdriver #FFBBBB
+converter -> dsdriver : initialize (option)
+activate dsdriver
+dsdriver -> converter : true or false
+destroy dsdriver
 
-converter -> updriver : new updriver ()
-activate updriver #FFBBBB
-converter -> updriver : initialize (option)
-activate updriver
-updriver -> converter : true or false
-destroy updriver
+converter -> ssdriver : new ssdriver ()
+activate ssdriver #FFBBBB
+converter -> ssdriver : initialize (option)
+activate ssdriver
+ssdriver -> converter : true or false
+destroy ssdriver
 converter -> main : true or false
 destroy converter
 
 ... time delay ...
 == Processing ==
-alt message arrival to downdriver
+alt message arrival to dsdriver
 note over main
-  message arrival to downdriver
+  message arrival to dsdriver
 end note
-main -> downdriver : wakeup ()
-activate downdriver
-downdriver -> downdriver : processmessage ()
-downdriver -> main : ture or false
-destroy downdriver
+main -> dsdriver : wakeup ()
+activate dsdriver
+dsdriver -> dsdriver : processmessage ()
+dsdriver -> main : ture or false
+destroy dsdriver
 ...
-else message arrival to updriver
+else message arrival to ssdriver
 note over main
-  message arrival to updriver
+  message arrival to ssdriver
 end note
-main -> updriver : wakeup ()
-activate updriver
-updriver -> updriver : processmessage ()
-updriver -> main : ture or false
-destroy updriver
+main -> ssdriver : wakeup ()
+activate ssdriver
+ssdriver -> ssdriver : processmessage ()
+ssdriver -> main : ture or false
+destroy ssdriver
 ...
 else timeout
 note over main
@@ -51,47 +51,56 @@ end note
 end
 main -> converter : wakeup ()
 activate converter
-converter -> downdriver : preprocess()
-activate downdriver
-note over downdriver
+converter -> dsdriver : preprocess()
+activate dsdriver
+note over dsdriver
   Reading Observations, Motor Position & Status, Switch Status
 end note
-downdriver -> converter : true or false
-destroy downdriver
-converter -> updriver : preprocess()
-activate updriver
-note over updriver
+dsdriver -> converter : true or false
+destroy dsdriver
+converter -> ssdriver : preprocess()
+activate ssdriver
+note over ssdriver
   Reading Commands
 end note
-updriver -> converter : true or false
-destroy updriver
+ssdriver -> converter : true or false
+destroy ssdriver
 
-loop until NoDeviceException(downdriver.getdevice)
-  converter -> downdriver : getdevice(index)
-  activate downdriver
-  downdriver -> converter : downdevice
-  destroy downdriver
-  converter -> converter : findindex(downdevice.getid())
-  converter -> updriver : getdevice(newindex)
-  activate updriver
-  updriver -> converter : updevice
-  destroy updriver
-  converter -> converter : updevice.stream(downdevice)
+loop until NoDeviceException(dsdriver.getdevice)
+  converter -> dsdriver : getdevice(index)
+  activate dsdriver
+  dsdriver -> converter : device
+  destroy dsdriver
+  converter -> ssdriver : sharedevice(device)
+  activate ssdriver
+  ssdriver -> converter : true or false
+  destroy ssdriver
 end
 
-converter -> downdriver : postprocess()
-activate downdriver
-note over downdriver
+loop until NoCommandException(ssdriver.getcommand)
+  converter -> ssdriver : getcommand(index)
+  activate ssdriver
+  ssdriver -> converter : command
+  destroy ssdriver
+  converter -> dsdriver : control(command)
+  activate dsdriver
+  dsdriver -> converter : true or false
+  destroy dsdriver
+end
+
+converter -> dsdriver : postprocess()
+activate dsdriver
+note over dsdriver
   Executing Commands
 end note
-downdriver -> converter : true or false
-converter -> updriver : postprocess()
-activate updriver
-note over updriver
+dsdriver -> converter : true or false
+converter -> ssdriver : postprocess()
+activate ssdriver
+note over ssdriver
   Writing Observations, Motor Position & Status, Switch Status
 end note
-updriver -> converter : true or false
-destroy updriver
+ssdriver -> converter : true or false
+destroy ssdriver
 
 converter -> main : true or false
 destroy converter
@@ -101,18 +110,18 @@ destroy converter
 ... kill signal ...
 main -> converter : finalize ()
 activate converter
-converter -> updriver : finalize ()
-activate updriver
-updriver -> converter : true or false
-destroy updriver
-converter -> updriver : delete
-destroy updriver
-converter -> downdriver : finalize ()
-activate downdriver
-downdriver -> converter : true or false
-destroy downdriver
-converter -> downdriver : delete
-destroy downdriver
+converter -> ssdriver : finalize ()
+activate ssdriver
+ssdriver -> converter : true or false
+destroy ssdriver
+converter -> ssdriver : delete
+destroy ssdriver
+converter -> dsdriver : finalize ()
+activate dsdriver
+dsdriver -> converter : true or false
+destroy dsdriver
+converter -> dsdriver : delete
+destroy dsdriver
 destroy converter
 main -> converter : delete
 destroy converter
