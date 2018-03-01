@@ -9,7 +9,7 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-#define DELIM			","
+#define DELIM			" "
 #define BUFSIZE     	64
 #define SMASK			'^'
 #define EMASK			'$'

@@ -123,7 +123,7 @@ public:
 	}
 
     void getmessage (char *buf, int size) {
-        snprintf(buf, size, "^s,%d,%d.%d,%d$", SENSOR_ID, value/10, value%10, stat);
+        snprintf(buf, size, "^s %d %d.%d %d$", SENSOR_ID, value/10, value%10, stat);
     }
 };
 
@@ -227,7 +227,7 @@ public:
 	}
 
     void getmessage (char *buf, int size) {
-        snprintf(buf, size, "^m,%d,%d,%d,%d$", MOTOR_ID, current, command, stat);
+        snprintf(buf, size, "^m %d %d %d %d$", MOTOR_ID, current, command, stat);
     }
 };
 
@@ -306,7 +306,7 @@ public:
 	}
 
     void getmessage (char *buf, int size) {
-        snprintf(buf, size, "^w,%d,%d$", SWITCH_ID, stat);
+        snprintf(buf, size, "^w %d %d$", SWITCH_ID, stat);
     }
 };
 

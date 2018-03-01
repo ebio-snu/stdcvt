@@ -20,39 +20,39 @@
 
 1. 프로토콜은 ^로 시작해서 $로 끝난다.
 1. s, m, w 중 하나로 시작한다. s는 센서, m은 모터, w는 스위치를 의미한다.
-1. 각각의 값은 ,로 구분된다.
-1. node->downdriver 로 전송되는 메세지는 다음중 하나이다. devid는 장비아이디, obs는 관측치,  status는 장비상태,  cur의 모터의 현재 위치, target 은 모터의 목표 위치를 의미한다.
+1. 각각의 값은 스페이스로 구분된다.
+1. node->downdriver 로 전송되는 메세지는 다음중 하나이다. devid는 장비아이디, obs는 관측치, status는 장비상태, cur의 모터의 현재 위치, target 은 모터의 목표 위치를 의미한다.
   ```
-  ^s,devid,obs,status$
-  ^m,devid,cur,target,status$
-  ^w,devid,status$
+  ^s devid obs status$
+  ^m devid cur target status$
+  ^w devid status$
   ```
 1. downdriver->node 로 전송되는 메세지는 다음중 하나이다. cmdid는 명령의 아이디이다.
   ```
-  ^m,devid,cmdid,target$
-  ^w,devid,cmdid,status$
+  ^m devid cmdid target$
+  ^w devid cmdid status$
   ```
 1. 메세지를 받으면 확인을 했다는 의미로 ^$를 전송한다.
 
 ### 예시
 * 센서 메세지 예시 : 10번 센서의 값이 19.6 이고, 정상이다.
 ```
-^s,10,19.6,1$
+^s 10 19.6 1$
 ```
 * 모터 메세지 예시 : 20번 모터의 현재 포지션은 10%이고, 20%를 향해서 열리고 있다.
 ```
-^m,20,10,20,1$
+^m 20 10 20 1$
 ```
 * 스위치 메세지 예시 : 30번 스위치는 꺼져있다.
 ```
-^w,30,0$
+^w 30 0$
 ```
 * 모터명령 예시 : 20번 모터를 10%만큼 열어라.
 ```
-^m,20,1,10$
+^m 20 1 10$
 ```
 * 스위치명령 예시 : 30번 스위치를 켜라.
 ```
-^w,30,1$
+^w 30 1$
 ```
 
