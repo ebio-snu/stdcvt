@@ -57,15 +57,15 @@
 ## 개발관련 공통사항
 * 라이브러리
   * [google glog](https://github.com/google/glog) : Google 에서 공개한 로깅라이브러리
-  * [jansson](http://www.digip.org/jansson) : JSON 라이브러리
-  * [Boost](http://www.boost.org/) : asio와 dll을 주로 사용
+  * [jsoncons](https://danielaparker.github.io/jsoncons/) : JSON 라이브러리
+  * [Boost](http://www.boost.org/) : [asio](https://think-async.com/)와 [dll](http://www.boost.org/doc/libs/1_65_1/doc/html/boost_dll.html)을 주로 사용
   * 개별 드라이버 개발을 위해 필요한 라이브러리를 사용할 수 있다.
 
 * 개발환경
   * g++ : 기본 설정으로 g++을 사용. VC에서 테스트되지는 않았지만 큰 문제는 없을것으로 기대.
-  * cmake
-  * mysql-5.5
+  * cmake : 빌드환경
   * nodejs : Test UI를 위한 환경
+  * mysql-5.5 : (사용여부 불확실) 데이터저장소를 위한 용도로 활용 예정.
 
 * 개발문서
-  * doxygen
+  * [doxygen](http://www.stack.nl/~dimitri/doxygen/) : 코드 문서화를 위해 활용
