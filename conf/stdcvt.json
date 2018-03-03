@@ -1,18 +1,19 @@
 {
   "version": "1.0.1",
-  "upapi": {
+  "ssdriver": {
     "driver": "libup_0288p12.so",
     "option": {
       "ip": "127.0.0.1",
       "port": "2333"
     }
   },
-  "downapi": {
+  "dsdriver": [{
     "driver": "libdn_sample.so",
     "option": {
-      "port": "/dev/ttyUSB0"
+      "port": "/dev/ttyUSB0",
+      "baudrate": 115200
     }
-  },
+  }],
   "sensors": [
     {
       "name": "온도",

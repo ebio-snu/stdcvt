@@ -80,3 +80,30 @@ cd ../build
 cmake ..
 make
 ```
+
+## 컨버터의 설정
+
+컨버터는 json 파일로 된 설정파일에 의해서 설정이 이루어진다. 설정파일은 ssdriver 와 dsdriver 로 나뉘어지는데 기본적인 구조는 동일하다.
+
+```
+{ 
+    "ssdriver": [{
+        "driver": "libsssample.so",
+        "option": {
+            "value": "value.json",
+            "command": "command.json"
+        }
+    }],
+    "dsdriver": [{
+        "driver": "libdssample.so",
+        "option": {
+            "port": "/dev/ttyUSB0",
+            "baudrate": 115200
+        }
+    }]
+}
+```
+
+하나의 드라이버에 대한 설정은 드라이버 파일명과 해당 드라이버 구동을 위한 옵션으로 구성된다. 드라이버 파일명은 추후 협회의 시스템이 구축될때 내부적인 규칙에 따라 정리될 예정이다. 드라이버의 옵션은 해당드라이버에 맞게 개발자가 설정하면 된다.
+
+
