@@ -12,7 +12,7 @@
 
 1.  현재디렉토리를 arduino의 sketchbook location 으로 설정한다. (File->Preferences)
 1. Library Manager 를 이용하여 DallasTemperature와 LiquidCrystal I2C를 설치한다.
-1. ebionode.ino를 열어서 컴파일하고 업로드 한다. 
+1. samplenode.ino를 열어서 컴파일하고 업로드 한다. 
 
 ## 디폴트 설정
 

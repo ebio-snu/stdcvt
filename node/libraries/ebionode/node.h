@@ -34,13 +34,21 @@ public:
     int getdisplayvalue (int i) {
         switch (i) {
             case 0:
-                return mtctrl.getvalue(20);
+                return senobs.getvalue(10);
             case 1:
-                return mtctrl.getstatus(20);
+                return senobs.getvalue(11);
             case 2:
                 return swctrl.getstatus(30);
             case 3:
-                return senobs.getvalue(10);
+                return swctrl.getstatus(31);
+            case 4:
+                return mtctrl.getvalue(20);
+            case 5:
+                return mtctrl.getstatus(20);
+            case 6:
+                return mtctrl.getvalue(21);
+            case 7:
+                return mtctrl.getstatus(22);
             default:
                 return 0;
         }

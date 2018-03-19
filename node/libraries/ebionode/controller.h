@@ -10,8 +10,7 @@
 #define _CONTROLLER_H_
 
 #include <Arduino.h>
-#include <OneWire.h>
-#include <DallasTemperature.h>
+#include <DHT.h>
 #include <util.h>
 
 class Controller {
@@ -32,7 +31,7 @@ public:
 
 	virtual void setup () = 0;
     virtual int getnumber () = 0;
-    virtual int getdeviceid (int idx) = 0;
+    virtual int getdeviceid (unsigned int idx) = 0;
     virtual int hasdeviceid (int devid) = 0;
     virtual int getstatus (int devid) = 0;
     virtual int setstatus (int devid, int status) = 0;
@@ -54,59 +53,68 @@ public:
 #define SWITCH_ID	30
 
 
-#define ONE_WIRE_BUS	2
+#define NUMOFSENSOR 2
+#define DHTPIN      4
 
 class SensorObserver : public Controller {
 private:
-    int value;
-    int stat;
-    OneWire *pwire;
-    DallasTemperature *ptemp;
+    int value[NUMOFSENSOR];
+    int stat[NUMOFSENSOR];
+    DHT *pdht;
 
 public:
     SensorObserver () : Controller () {
-        pwire = new OneWire(ONE_WIRE_BUS);
-        ptemp = new DallasTemperature(pwire);
-        stat = 1;
+        pdht = new DHT(DHTPIN, DHT22);
+        stat[0] = stat[1] = 1;
+        value[0] = value[1] = 1;
     }
 
 	void setup () {
-        ptemp->begin();
+        pdht->begin();
 	}
 
     int getnumber () {
-		return 1;
+		return NUMOFSENSOR;
 	}
 
-    int getdeviceid (int idx) {
-		if (idx == 0)
-			return SENSOR_ID;
-		else
-			return 0;
+    int getdeviceid (unsigned int idx) {
+        if (idx < NUMOFSENSOR)
+            return SENSOR_ID + idx;
+        return 0;
 	}
 
     int hasdeviceid (int devid) {
-		if (devid == SENSOR_ID)
+        if ((devid >= SENSOR_ID) 
+            && (devid < SENSOR_ID + NUMOFSENSOR))
 			return 1;
 		else
 			return 0;
 	}
 
     int getstatus (int devid) {
-		if (devid == SENSOR_ID)
-			return stat;
+        if ((devid >= SENSOR_ID) 
+            && (devid < SENSOR_ID + NUMOFSENSOR))
+			return stat[devid - SENSOR_ID];
 		else
 			return 0;
 	}
 
     int setstatus (int devid, int status) {
-        if (devid == SENSOR_ID)
-        	stat = status;
-        return stat;
+        if ((devid >= SENSOR_ID) 
+            && (devid < SENSOR_ID + NUMOFSENSOR)) {
+        	stat[devid - SENSOR_ID] = status;
+            return status;
+        } else {
+            return 0;
+        }
 	}
 
     int getvalue (int devid) {
-		return value;
+        if ((devid >= SENSOR_ID) 
+            && (devid < SENSOR_ID + NUMOFSENSOR))
+		    return value[devid - SENSOR_ID];
+        else
+            return 0;
 	}
 
     int control (HardwareSerial *serial, char *buf) {
@@ -118,65 +126,76 @@ public:
 	}
 
 	void process () {
-        ptemp->requestTemperatures(); 
-        value = (int)(ptemp->getTempCByIndex(0) * 10);
+        value[0] = (int)(pdht->readHumidity() * 10);
+        value[1] = (int)(pdht->readTemperature() * 10);
 	}
 
     void getmessage (char *buf, int size) {
-        snprintf(buf, size, "^s %d %d.%d %d$", SENSOR_ID, value/10, value%10, stat);
+        snprintf(buf, size, "^s %d %d.%d %d$^s %d %d.%d %d$", 
+                SENSOR_ID, value[0]/10, value[0]%10, stat[0],
+                SENSOR_ID+1, value[1]/10, value[1]%10, stat[1]);
     }
 };
 
+#define NUMOFMOT    2
+
 class MotorController : public Controller {
 private:
-	int current;
-	int command;
-	int stat;
+	int current[NUMOFMOT];
+	int command[NUMOFMOT];
+	int stat[NUMOFMOT];
 
 public:
     MotorController () : Controller () {
     }
 
 	void setup () {
-		current = 0;
-		command = 0;
-		stat = 0;
+		current[0] = current[1] = 0;
+		command[0] = command[1] = 0;
+		stat[0] = stat[1] = 0;
 	}
 
     int getnumber () {
-		return 1;
+		return NUMOFMOT;
 	}
 
-    int getdeviceid (int idx) {
-		if (idx == 0)
-			return MOTOR_ID;
+    int getdeviceid (unsigned int idx) {
+		if ((idx >= 0) && (idx < NUMOFMOT))
+			return MOTOR_ID + idx;
 		else
 			return 0;
 	}
 
     int hasdeviceid (int devid) {
-		if (devid == MOTOR_ID)
+		if ((devid >= MOTOR_ID) 
+            && (devid < MOTOR_ID))
 			return 1;
 		else
 			return 0;
 	}
 
     int getstatus (int devid) {
-		if (devid == MOTOR_ID)
-			return stat;
+		if ((devid >= MOTOR_ID) 
+            && (devid < MOTOR_ID + NUMOFMOT))
+			return stat[devid - MOTOR_ID];
 		else
 			return 0;
 	}
 
     int setstatus (int devid, int status) {
-        if (devid == MOTOR_ID)
-	        stat = status;
-        return stat;
+		if ((devid >= MOTOR_ID) 
+            && (devid < MOTOR_ID + NUMOFMOT)) {
+			stat[devid - MOTOR_ID] = status;
+			return status;
+        } else {
+            return 0;
+        }
 	}
 
     int getvalue (int devid) {
-		if (devid == MOTOR_ID)
-            return current;
+		if ((devid >= MOTOR_ID) 
+            && (devid < MOTOR_ID + NUMOFMOT))
+            return current[devid - MOTOR_ID];
         else
 		    return 0;
 	}
@@ -192,90 +211,112 @@ public:
         int cmdid = getnext();
         int cmd = getnext();
 
-		if (devid != MOTOR_ID)
-			return 0;
+		if ((devid >= MOTOR_ID) 
+            && (devid < MOTOR_ID + NUMOFMOT)) {
 
-        if (cmd == -1) {
-            stat = 0;
+            int idx = devid = MOTOR_ID;
+
+            if (cmd == -1) {
+                stat[idx] = 0;
+            } else {
+                if (current[idx] > cmd) { //close
+                    stat[idx] = 2;
+                } else if (current[idx] < cmd) { // open
+                    stat[idx] = 1;
+                } else { // error
+                    stat[idx] = 0;
+                }
+                command[idx] = cmd;
+            }
+            SENDOK(serial);
+		    return 1;
         } else {
-            if (current > cmd) { //close
-				stat = 2;
-			} else if (current < cmd) { // open
-				stat = 1;
-			} else { // error
-				stat = 0;
-			}
-			command = cmd;
+            return 0;
         }
-
-        SENDOK(serial);
-		return 1;
 	}
 
     int stop (int devid) {
-		stat = 0;
+		if ((devid >= MOTOR_ID) 
+            && (devid < MOTOR_ID + NUMOFMOT)) 
+		    stat[devid - MOTOR_ID] = 0;
 		return 0;
 	}
 
 	void process () {
-		if (stat == 1 && current < command) // open
-			current ++;
-		else if (stat == 2 && current > command) // close
-			current --;	
-        else
-            stat = 0;
+        for (int i = 0; i < NUMOFMOT; i++) {
+            if (stat[i] == 1 && current[i] < command[i]) // open
+                current[i] ++;
+            else if (stat[i] == 2 && current[i] > command[i]) // close
+                current[i] --;	
+            else
+                stat[i] = 0;
+        }
 	}
 
     void getmessage (char *buf, int size) {
-        snprintf(buf, size, "^m %d %d %d %d$", MOTOR_ID, current, command, stat);
+        snprintf(buf, size, "^m %d %d %d %d$^m %d %d %d %d$", 
+                MOTOR_ID, current[0], command[0], stat[0],
+                MOTOR_ID + 1, current[1], command[1], stat[1]);
     }
 };
 
+#define NUMOFSWC    2
+
 class SwitchController : public Controller {
 private:
-	int stat;
+	int stat[NUMOFSWC];
 
 public:
     SwitchController () : Controller () {
     }
 
 	void setup () {
-		stat = 0;
+		stat[0] = stat[1] = 0;
 	}
 
     int getnumber () {
-		return 1;
+		return NUMOFSWC;
 	}
 
-    int getdeviceid (int idx) {
-		if (idx == 0)
-			return SWITCH_ID;
+    int getdeviceid (unsigned int idx) {
+		if ((idx >= 0) && (idx < NUMOFSWC))
+			return SWITCH_ID + idx;
 		else
 			return 0;
 	}
 
     int hasdeviceid (int devid) {
-		if (devid == SWITCH_ID)
+		if ((devid >= SWITCH_ID)
+            && (devid < SWITCH_ID + NUMOFSWC))
 			return 1;
 		else
             return 0;
     }
 
     int getstatus (int devid) {
-		if (devid == SWITCH_ID)
-			return stat;
+		if ((devid >= SWITCH_ID)
+            && (devid < SWITCH_ID + NUMOFSWC))
+			return stat[devid - SWITCH_ID];
 		else
 			return 0;
 	}
 
     int setstatus (int devid, int status) {
-        if (devid == SWITCH_ID)
-        	stat = status;
-        return stat;
+		if ((devid >= SWITCH_ID)
+            && (devid < SWITCH_ID + NUMOFSWC)) {
+			stat[devid - SWITCH_ID] = status;
+        	return status;
+        } else {
+            return 0;
+        }
 	}
 
     int getvalue(int devid) {
-		return stat;
+		if ((devid >= SWITCH_ID)
+            && (devid < SWITCH_ID + NUMOFSWC))
+		    return stat[devid - SWITCH_ID];
+        else
+            return 0;
 	}
 
     int control (HardwareSerial *serial, char *buf) {
@@ -289,16 +330,20 @@ public:
         int cmdid = getnext();
         int cmd = getnext();
 
-		if (devid != SWITCH_ID)
+		if ((devid >= SWITCH_ID)
+            && (devid < SWITCH_ID + NUMOFSWC)) {
+            stat[devid - SWITCH_ID] = cmd;
+            SENDOK(serial);
+            return 1;
+        } else {
 			return 0;
-
-		stat = cmd;
-        SENDOK(serial);
-		return 1;
+        }
 	}
 
     int stop (int devid) {
-		stat = 0;
+		if ((devid >= SWITCH_ID)
+            && (devid < SWITCH_ID + NUMOFSWC)) 
+		    stat[devid - SWITCH_ID] = 0;
 		return 0;
 	}
 
@@ -306,7 +351,8 @@ public:
 	}
 
     void getmessage (char *buf, int size) {
-        snprintf(buf, size, "^w %d %d$", SWITCH_ID, stat);
+        snprintf(buf, size, "^w %d %d$^w %d %d$", 
+                SWITCH_ID, stat[0], SWITCH_ID + 1, stat[1]);
     }
 };
 

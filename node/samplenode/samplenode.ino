@@ -6,10 +6,9 @@
  * \brief ebionode 의 메인
  */
 
-#define _DEBUG_
+//#define _DEBUG_
 
 #include <node.h>
-#include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 
 LiquidCrystal_I2C lcd(0x27,20,4);
@@ -27,30 +26,48 @@ void setup () {
 void monitor () {
   lcd.backlight();
   lcd.setCursor(0,0);
-  lcd.print("MT: ");
+  lcd.print(enode.getdisplayvalue(0) / 10.0);
   lcd.setCursor(4,0);
-  lcd.print(enode.getdisplayvalue(0));
-  lcd.setCursor(6,0);
   lcd.print("% ");
-  lcd.setCursor(8,0);
-  if (enode.getdisplayvalue(1) == 0)
-    lcd.print("STOP ");
-  else if (enode.getdisplayvalue(1) == 1)
-    lcd.print("OPEN ");
+  lcd.setCursor(6,0);
+  lcd.print(enode.getdisplayvalue(1) / 10.0);
+  lcd.setCursor(10,0);
+  lcd.print("C");
+  
+  lcd.setCursor(12,0);
+  if (enode.getdisplayvalue(2) == 0)
+    lcd.print("F");
   else
-    lcd.print("CLOSE");
+    lcd.print("T");
+  lcd.setCursor(14,0);
+  if (enode.getdisplayvalue(3) == 0)
+    lcd.print("F");
+  else
+    lcd.print("T");
   
   lcd.setCursor(0,1);
-  lcd.print("SW:");
+  lcd.print(enode.getdisplayvalue(4));
+  lcd.setCursor(2,1);
+  lcd.print("% ");
   lcd.setCursor(4,1);
-  if (enode.getdisplayvalue(2) == 0)
-    lcd.print("OFF");
+  if (enode.getdisplayvalue(5) == 0)
+    lcd.print("S");
+  else if (enode.getdisplayvalue(5) == 1)
+    lcd.print("O");
   else
-    lcd.print("ON ");
-  lcd.setCursor(7,1);
-  lcd.print(" SE: ");
-  lcd.setCursor(11,1);
-  lcd.print(enode.getdisplayvalue(3) / 10.0);
+    lcd.print("C");
+  
+  lcd.setCursor(8,1);
+  lcd.print(enode.getdisplayvalue(4));
+  lcd.setCursor(10,1);
+  lcd.print("% ");
+  lcd.setCursor(12,1);
+  if (enode.getdisplayvalue(5) == 0)
+    lcd.print("S");
+  else if (enode.getdisplayvalue(5) == 1)
+    lcd.print("O");
+  else
+    lcd.print("C");  
 }
 
 void loop () {
