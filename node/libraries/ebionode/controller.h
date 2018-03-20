@@ -142,7 +142,8 @@ public:
 class MotorController : public Controller {
 private:
 	int current[NUMOFMOT];
-	int command[NUMOFMOT];
+	int cmdid[NUMOFMOT];
+	int target[NUMOFMOT];
 	int stat[NUMOFMOT];
 
 public:
@@ -151,7 +152,8 @@ public:
 
 	void setup () {
 		current[0] = current[1] = 0;
-		command[0] = command[1] = 0;
+		cmdid[0] = cmdid[1] = 0;
+		target[0] = target[1] = 0;
 		stat[0] = stat[1] = 0;
 	}
 
@@ -208,25 +210,30 @@ public:
             return 0;
 
         int devid = getnext();
-        int cmdid = getnext();
+        int cid = getnext();
         int cmd = getnext();
 
 		if ((devid >= MOTOR_ID) 
             && (devid < MOTOR_ID + NUMOFMOT)) {
 
-            int idx = devid = MOTOR_ID;
+            int idx = devid - MOTOR_ID;
 
-            if (cmd == -1) {
+            if (cmdid[idx] >= cid) // it's already processed.
+                return 0;
+
+            if (cmd == -1) { // stop
                 stat[idx] = 0;
+                cmdid[idx] = cid;
             } else {
                 if (current[idx] > cmd) { //close
                     stat[idx] = 2;
                 } else if (current[idx] < cmd) { // open
                     stat[idx] = 1;
-                } else { // error
+                } else { // no need to move
                     stat[idx] = 0;
                 }
-                command[idx] = cmd;
+                cmdid[idx] = cid;
+                target[idx] = cmd;
             }
             SENDOK(serial);
 		    return 1;
@@ -244,9 +251,9 @@ public:
 
 	void process () {
         for (int i = 0; i < NUMOFMOT; i++) {
-            if (stat[i] == 1 && current[i] < command[i]) // open
+            if (stat[i] == 1 && current[i] < target[i]) // open
                 current[i] ++;
-            else if (stat[i] == 2 && current[i] > command[i]) // close
+            else if (stat[i] == 2 && current[i] > target[i]) // close
                 current[i] --;	
             else
                 stat[i] = 0;
@@ -254,9 +261,9 @@ public:
 	}
 
     void getmessage (char *buf, int size) {
-        snprintf(buf, size, "^m %d %d %d %d$^m %d %d %d %d$", 
-                MOTOR_ID, current[0], command[0], stat[0],
-                MOTOR_ID + 1, current[1], command[1], stat[1]);
+        snprintf(buf, size, "^m %d %d %d %d %d$^m %d %d %d %d %d$", 
+                MOTOR_ID, cmdid[0], current[0], target[0], stat[0],
+                MOTOR_ID + 1, cmdid[1], current[1], target[1], stat[1]);
     }
 };
 
@@ -265,6 +272,7 @@ public:
 class SwitchController : public Controller {
 private:
 	int stat[NUMOFSWC];
+	int cmdid[NUMOFSWC];
 
 public:
     SwitchController () : Controller () {
@@ -327,12 +335,19 @@ public:
             return 0;
 
         int devid = getnext();
-        int cmdid = getnext();
+        int cid = getnext();
         int cmd = getnext();
 
 		if ((devid >= SWITCH_ID)
             && (devid < SWITCH_ID + NUMOFSWC)) {
-            stat[devid - SWITCH_ID] = cmd;
+            
+            int idx = devid - SWITCH_ID;
+
+            if (cmdid[idx] >= cid) // it's already processed.
+                return 0;
+
+            stat[idx] = cmd;
+            cmdid[idx] = cid;
             SENDOK(serial);
             return 1;
         } else {
@@ -351,8 +366,9 @@ public:
 	}
 
     void getmessage (char *buf, int size) {
-        snprintf(buf, size, "^w %d %d$^w %d %d$", 
-                SWITCH_ID, stat[0], SWITCH_ID + 1, stat[1]);
+        snprintf(buf, size, "^w %d %d %d$^w %d %d %d$", 
+                SWITCH_ID, cmdid[0], stat[0], 
+                SWITCH_ID + 1, cmdid[1], stat[1]);
     }
 };
 

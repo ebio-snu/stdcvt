@@ -18,7 +18,7 @@
 #ifdef _DEBUG_
   #define SENDOK(serial) {serial->write (SMASK); serial->write (EMASK); serial->write('\n'); serial->flush ();}
   #define WRITE(serial,buf) {serial->write (buf); serial->write('\n'); serial->flush ();}
-  #define INFO(serial,buf)  {serial->write (buf); serial->write('\n'); serial->flush ();}
+  #define INFO(serial,buf)  {serial->println (buf); serial->flush ();}
 #else
   #define SENDOK(serial) {serial->write (SMASK); serial->write (EMASK); serial->flush ();}
   #define WRITE(serial,buf) {serial->write (buf); serial->flush ();}
