@@ -1,58 +1,64 @@
 {
-  "version": "1.0.1",
-  "ssdriver": {
-    "driver": "libup_0288p12.so",
+  "stdcvt" : {
+    "farm" : "farmid",
+    "serial" : "000000000000000d",
+    "version" : "1.0.0"
+  }, 
+  "ssdriver": [{
+    "driver": "../cvtdriver/lib/libsssample.so",
     "option": {
-      "ip": "127.0.0.1",
-      "port": "2333"
-    }
-  },
-  "dsdriver": [{
-    "driver": "libdn_sample.so",
-    "option": {
-      "port": "/dev/ttyUSB0",
-      "baudrate": 115200
+      "host": "tcp://127.0.0.1:3306",
+      "user": "root",
+      "pass": "scscraid",
+      "db": "ssdriver"
     }
   }],
-  "sensors": [
-    {
-      "name": "온도",
-      "up": "1",
-      "down": "100"
-    },
-    {
-      "name": "습도",
-      "up": "2",
-      "down": "101"
-    },
-    {
-      "name": "이산화탄소",
-      "up": "3",
-      "down": "102"
+  "dsdriver": [{
+    "driver": "../cvtdriver/lib/libdssample.so",
+    "option": {
+      "port": "/dev/ttyUSB0",
+      "baudrate": 115200,
+      "_sensors" : [{
+        "id" : "10",
+        "type" : "DT_SEN_HUMIDITY",
+        "section" : "DL_DEFAULT_PLANTZONE",
+        "target" : "DO_ENV_ATMOSPHERE",
+        "status" : "DS_SEN_NORMAL",
+        "unit" : "OU_PERCENT"
+      }, {
+        "id" : "11",
+        "type" : "DT_SEN_TEMPERATURE",
+        "section" : "DL_DEFAULT_PLANTZONE",
+        "target" : "DO_ENV_ATMOSPHERE",
+        "status" : "DS_SEN_NORMAL",
+        "unit" : "OU_CELSIUS"
+      }],
+      "_switches" : [{
+        "id" : "30",
+        "type" : "DT_SWC_FAN",
+        "section" : "DL_DEFAULT_PLANTZONE",
+        "target" : "DO_EQUIPMENT",
+        "status" : "DS_SWC_OFF"
+      }, {
+        "id" : "31",
+        "type" : "DT_SWC_FAN",
+        "section" : "DL_DEFAULT_PLANTZONE",
+        "target" : "DO_EQUIPMENT",
+        "status" : "DS_SWC_OFF"
+      }],
+      "_motors" : [{
+        "id" : "20",
+        "type" : "DT_MOT_SIDEWINDOW",
+        "section" : "DL_DEFAULT_PLANTZONE",
+        "target" : "DO_EQUIPMENT",
+        "status" : "DS_MOT_STOP"
+      }, {
+        "id" : "21",
+        "type" : "DT_MOT_SIDEWINDOW",
+        "section" : "DL_DEFAULT_PLANTZONE",
+        "target" : "DO_EQUIPMENT",
+        "status" : "DS_MOT_STOP"
+      }]
     }
-  ],
-  "motors": [
-    {
-      "name": "좌측창",
-      "up": "11",
-      "down": "200"
-    },
-    {
-      "name": "우측창",
-      "up": "12",
-      "down": "201"
-    }
-  ],
-  "switch": [
-    {
-      "name": "유동팬",
-      "up": "21",
-      "down": "300"
-    },
-    {
-      "name": "환기팬",
-      "up": "22",
-      "down": "301"
-    }
-  ]
+  }]
 }
