@@ -26,8 +26,11 @@
 
 #include <glog/logging.h>
 
+#define DEFAULT_TIMEOUT     10
+
 class StdConverter {
 private:
+    json _config;
     boost::shared_ptr<CvtDriver> _ssdriver;
     vector<boost::shared_ptr<CvtDriver>> _dsdrivers;
     boost::asio::io_service *_pio;
@@ -35,7 +38,7 @@ private:
     boost::asio::deadline_timer _timer;
 
 public:
-    StdConverter(boost::asio::io_service& io, 
+    StdConverter(boost::asio::io_service& io, json config, 
             boost::shared_ptr<CvtDriver> ssdriver,
             vector<boost::shared_ptr<CvtDriver>> dsdrivers)
         : _timer(io, boost::posix_time::seconds(1)) {
@@ -43,6 +46,7 @@ public:
         _pio = &io;
         _ssdriver = ssdriver;
         _dsdrivers = dsdrivers;
+        _config = config;
         _timer.async_wait(boost::bind(&StdConverter::timer, this));
     }
 
@@ -62,7 +66,15 @@ public:
         LOG(INFO) << "  SSDriver : " << (ret ? "shared" : "not shared");
     }
 
-    void execute() {
+    void preprocess() {
+        // preprocess
+        for (unsigned int i = 0; i < _dsdrivers.size(); i++) {
+            _dsdrivers[i]->preprocess ();
+        }
+        _ssdriver->preprocess();
+    }
+
+    void share() {
         // share device
         LOG(INFO) << "Sharing devices...";
         for (unsigned int i = 0; i < _dsdrivers.size(); i++) {
@@ -73,7 +85,9 @@ public:
                 sharedevice (pdev, i);
             }
         }
+    }
         
+    void control() {
         // control
         CvtCommand *pcmd = _ssdriver->getcommand ();
 
@@ -91,6 +105,21 @@ public:
         }
     }
 
+    void postprocess () {
+        // postprocess
+        for (unsigned int i = 0; i < _dsdrivers.size(); i++) {
+            _dsdrivers[i]->postprocess ();
+        }
+        _ssdriver->postprocess();
+    }
+
+    void execute() {
+        preprocess ();
+        share ();
+        control ();
+        postprocess ();
+    }
+
     void timer() {
         execute ();
         resettimer ();
@@ -99,7 +128,9 @@ public:
     void resettimer () {
         //_pio->stop ();
         //++_count;
-        _timer.expires_at(_timer.expires_at() + boost::posix_time::seconds(1));
+        int sec = _config.get_with_default ("timeout", DEFAULT_TIMEOUT);
+
+        _timer.expires_at(_timer.expires_at() + boost::posix_time::seconds(sec));
         _timer.async_wait(boost::bind(&StdConverter::timer, this));
     }
 };

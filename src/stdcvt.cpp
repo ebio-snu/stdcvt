@@ -115,7 +115,7 @@ execute (string conffile) {
         dsdrivers.push_back (loaddriver (driver, (void *)(&io_service)));
     }
 
-    StdConverter stdcvt(io_service, ssdriver, dsdrivers);
+    StdConverter stdcvt(io_service, config["stdcvt"], ssdriver, dsdrivers);
     io_service.run();
 
     ssdriver->finalize ();
