@@ -1,11 +1,6 @@
 {
-  "stdcvt" : {
-    "farm" : "2000-00001",
-    "serial" : "000000000000000d",
-    "version" : "1.0.0"
-  }, 
   "ssdriver": [{
-    "driver": "../cvtdriver/lib/libsssample.so",
+    "driver": "libsssample.so",
     "option": {
       "host": "tcp://127.0.0.1:3306",
       "user": "ssdriver",
@@ -14,7 +9,7 @@
     }
   }],
   "dsdriver": [{
-    "driver": "../cvtdriver/lib/libdssample.so",
+    "driver": "libdssample.so",
     "option": {
       "port": "/dev/ttyUSB0",
       "baudrate": 115200,
