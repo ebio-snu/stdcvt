@@ -1,82 +1,112 @@
-const jsonfile = require('jsonfile')
-const express = require('express')
-const router = express.Router()
+var mysql = require('mysql2/promise')
+var jsonfile = require('jsonfile')
+var express = require('express')
+var router = express.Router()
 var path = require('path')
+var fs = require('fs')
 
-router.get('/json', function (req, res) {
-  const apilist = jsonfile.readFileSync(path.join(appRoot, 'ui/apilist.json'))
-  const command = jsonfile.readFileSync(path.join(appRoot, 'ui/command.json'))
-  var stdcvt = jsonfile.readFileSync(path.join(appRoot, '/ui/stdcvt.json'))
-  const value = jsonfile.readFileSync(path.join(appRoot, 'ui/value.json'))
+var pool = mysql.createPool({
+  host: 'localhost',
+  user: 'ssdriver',
+  password: 'sssample',
+  database: 'sssample'
+})
 
+async function getvalue() {
+  try {
+    const [rows] = await pool.query('select id, devtype, section, target, status, value, unit from devices')
+    return rows
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function getcommand() {
+  try {
+    const [rows] = await await pool.query('select id, devtype, section, target, onoff, ratio from commands')
+    return rows
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function insertcommand(command) {
+  try {
+    const [results] = await pool.query('insert into commands set ?', command)
+    console.log('newcommand')
+    console.log(results.insertId)
+    return results.insertId
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// configuration files
+var DRIVERLIST = '../conf/driverlist.json'
+var STDCVT = '../conf/stdcvt.json'
+var STDCVTBACKUP = '../conf/stdcvt_backup.json'
+var SENSORINFO = '../conf/sensorinfo.json'
+
+router.get('/stdcvt', async function (req, res) {
   res.json({
-    apilist, command, stdcvt, value
+    'driverlist': jsonfile.readFileSync(path.join(appRoot, DRIVERLIST)),
+    'stdcvt': jsonfile.readFileSync(path.join(appRoot, STDCVT)),
+    'command': await getcommand(),
+    'value': await getvalue()
   })
 })
 
-router.get('/json/default', function (req, res) {
+router.get('/stdcvt/default', function (req, res) {
   try {
-    const stdcvt = jsonfile.readFileSync(path.join(appRoot, 'ui/stdcvt.json'))
-    var stdcvtBackup = JSON.parse(JSON.stringify(stdcvt))
-    try {
-      jsonfile.writeFileSync(path.join(appRoot, 'ui/stdcvt_backup.json'), stdcvtBackup, { spaces: 2 })
-      stdcvt.upapi = {}
-      stdcvt.downapi = {}
-      jsonfile.writeFileSync(path.join(appRoot, 'ui/stdcvt.json'), stdcvt, { spaces: 2 })
-      res.sendStatus(200)
-    } catch (error) {
-      jsonfile.writeFileSync(path.join(appRoot, 'ui/stdcvt.json'), stdcvtBackup, { spaces: 2 })
-      res.sendStatus(500)
-    }
+    var stdcvt = jsonfile.readFileSync(path.join(appRoot, STDCVT))
+    fs.copyFileSync(path.join(appRoot, STDCVT), path.join(appRoot, STDCVTBACKUP))
+    stdcvt.ssdriver = []
+    stdcvt.dsdriver = []
+    jsonfile.writeFileSync(path.join(appRoot, STDCVT), stdcvt, {
+      spaces: 2
+    })
+    res.sendStatus(200)
   } catch (error) {
     res.sendStatus(500)
   }
 })
 
-router.get('/json/:file', function (req, res) {
-  const json = jsonfile.readFileSync(path.join(appRoot, 'ui/' + req.params.file + '.json'))
-  res.json(
-    json
-  )
+router.get('/stdcvt/value', function (req, res) {
+  res.json(getvalue())
 })
 
-router.post('/json/:file', function (req, res) {
-  console.log(req.body)
-
-  jsonfile.writeFile(path.join(appRoot, 'ui/' + req.params.file + '.json'), req.body, { spaces: 2 }, function (err) {
-    if (err) {
-      res.sendStatus(500)
-    } else {
-      res.sendStatus(200)
-    }
-  })
+router.post('/stdcvt/command', async function (req, res) {
+  const result = await insertcommand(req.body)
+  if (result !== undefined) {
+    res.send(200, result)
+  } else {
+    res.sendStatus(500)
+  }
 })
 
-router.post('/jsons', function (req, res) {
+router.post('/stdcvt/stdcvt', function (req, res) {
   try {
-    let oriJson = {}
-    oriJson.stdcvt = jsonfile.readFileSync(path.join(appRoot, 'ui/stdcvt.json'))
-    oriJson.command = jsonfile.readFileSync(path.join(appRoot, 'ui/command.json'))
-    try {
-      jsonfile.writeFileSync(path.join(appRoot, 'ui/stdcvt.json'), req.body.stdcvt, { spaces: 2 })
-      jsonfile.writeFileSync(path.join(appRoot, 'ui/command.json'), req.body.command, { spaces: 2 })
-      res.sendStatus(200)
-    } catch (error) {
-      jsonfile.writeFileSync(path.join(appRoot, 'ui/stdcvt.json'), oriJson.stdcvt, { spaces: 2 })
-      jsonfile.writeFileSync(path.join(appRoot, 'ui/command.json'), oriJson.command, { spaces: 2 })
-      res.sendStatus(500)
-    }
+    jsonfile.writeFileSync(path.join(appRoot, STDCVT), req.body, {
+      spaces: 2
+    })
+    res.sendStatus(200)
   } catch (error) {
     res.sendStatus(500)
   }
 })
 
-router.get('/update', function (req, res) {
+router.get('/stdcvt/update', function (req, res) {
+  console.log('update : git pull')
   res.sendStatus(200)
 })
 
-router.get('/restart', function (req, res) {
+router.get('/stdcvt/restart', function (req, res) {
+  console.log('update : service stdcvt restart')
   res.sendStatus(200)
+})
+
+router.get('/stdcvt/info', function (req, res) {
+  res.json(jsonfile.readFileSync(path.join(appRoot, SENSORINFO)))
 })
 
 module.exports = router

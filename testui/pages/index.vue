@@ -1,272 +1,128 @@
 <template>
-  <section class="container">
-    <div class="card  mt-3 mb-3">
-      <div class="card-header">
-        <table style="width:100%">
-          <tbody>
-            <tr>
-              <td>
-                <h4 style="margin-bottom:0px;">ICT&nbsp;&nbsp;v.{{mainDatas.stdcvt.version}}</h4>
-              </td>
-              <td style="text-align:right;">
+  <section>
 
-                <button type="button" class="btn btn-primary mr-2" @click="restart">Update</button>
-                <button type="button" class="btn btn-warning mr-2" @click="update">Restart</button>
-                <button type="button" class="btn btn-success mr-2" @click="defaultData">Default</button>
-                <button type="button" class="btn btn-info mr-2" @click="saveData">Save</button>
+    <div class="container-fluid">
+      <div class="card mt-3 mb-3">
+        <div class="card-header">
+          <div class="row">
+            <div class="navbar">Driver</div>
+            <div class="col" style="text-align: right; padding-right: 0px;">
+              <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-primary btn-sm mr-2" @click="restart">Update</button>
+              <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-warning btn-sm mr-2" @click="update">Restart</button>
+              <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-success btn-sm mr-2" @click="defaultData">Default</button>
+              <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-info btn-sm mr-2" @click="saveData">Save</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <div style="text-align: center;">SSDRIVER
+              </div>
+              파일명
+              <b-form-select class="mb-4 mt-2" value-field="driver" text-field="driver" v-model="driveSsdSelected" :options="mainDatas.driverlist.ssdriver">
+              </b-form-select>
+              옵션
+              <jsoneditor class="mt-2" v-model="getDriveOpSsd" mode="code" @json-error="ssdErrorChg" />
 
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            </div>
+            <div class=" col-lg-6 ">
+              <div class="d-lg-none"><hr></div>
+              <div style="text-align: center;">DSDRIVER
+              </div>
+              파일명
+              <b-form-select class="mb-4 mt-2" value-field="driver" text-field="driver" v-model="driveDsdSelected" :options="mainDatas.driverlist.dsdriver">
+              </b-form-select>
+              옵션
+              <jsoneditor class="mt-2" v-model="getDriveOpDsd" mode="code" @json-error="dsdErrorChg" />
+
+            </div>
+          </div>
+        </div>
 
       </div>
-      <div class="card-block" style="padding-bottom: 0px;padding-left: 0px;padding-top: 0px;padding-right: 0px;">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col" width="10%"></th>
-              <th scope="col" width="20%"></th>
-              <th scope="col" width="35%">Up</th>
-              <th scope="col" width="35%">Down</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="spacer">
-              <th scope="row" style="vertical-align:middle;">드라이버</th>
-              <td>
-                <p style="margin-top: 8px;">파일명</p>
-                <p style="margin-top: 8px;">옵션</p>
-              </td>
-              <td>
-                <b-form-select value-field="driver" text-field="driver" v-model="driveUpSelected" :options="mainDatas.apilist.upapi">
-                </b-form-select>
-                <textarea class="form-control mt-2" rows="5" v-model="getDriveOpUp"></textarea>
-              </td>
-              <td>
-                <b-form-select value-field="driver" text-field="driver" v-model="driveDownSelected" :options="mainDatas.apilist.downapi">
-                </b-form-select>
-                <textarea class="form-control mt-2" rows="5" v-model="getDriveOpDown"></textarea>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="vertical-align:middle;">센서</th>
-              <td>
-                <table width="100%">
-                  <tbody>
-                    <tr v-for="(sensor,index) in mainDatas.stdcvt.sensors" :key="index">
-                      <td style="border-top:0px" width="30%">
-                        <input type="text" class="form-control" v-model="sensor.name">
-                      </td>
 
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-              <td>
-                <table width="100%">
-                  <tbody>
-                    <tr v-for="(sensor,index) in mainDatas.stdcvt.sensors" :key="index">
-                      <td style="border-top:0px" width="30%">
-                        <input type="text" class="form-control" v-model="sensor.up" max="100" min="0">
-                      </td>
-                      <td style="border-top:0px" width="40%">
-                        <input type="number" class="form-control" placeholder="value" disabled :value="getSensorData(sensor.oriup,'up')">
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-              <td>
-                <table width="100%">
-                  <tbody>
-                    <tr v-for="(sensor,index) in mainDatas.stdcvt.sensors" :key="index">
-                      <td style="border-top:0px" width="50%">
-                        <input type="text" class="form-control" v-model="sensor.down">
-                      </td>
-                      <td style="border-top:0px" width="50%">
-                        <input type="number" class="form-control" placeholder="value" disabled :value="getSensorData(sensor.oridown,'down')">
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="vertical-align:middle;">개폐기</th>
-              <td>
-                <table width="100%">
-                  <tbody>
-                    <tr v-for="(motor,index) in mainDatas.stdcvt.motors" :key="index">
-                      <td style="border-top:0px" width="25%">
-                        <input type="text" class="form-control" v-model="motor.name">
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-              <td>
-                <table width="100%">
-                  <tbody>
-                    <tr v-for="(motor,index) in mainDatas.stdcvt.motors" :key="index">
-                      <td style="border-top:0px" width="25%">
-                        <input type="text" class="form-control" v-model="motor.up">
-                      </td>
-                      <td style="border-top:0px" width="35%">
-                        <div class="input-group">
-                          <input type="number" min="0" max="100" class="form-control" placeholder="value" @input="e => setMotorUpData(motor.oriup,'target',e.target.value)" v-bind:value="getMotorUpData(motor.oriup,'target')">
-                          <div class="input-group-append">
-                            <button class="btn btn-outline-primary" :class="{active: getMotorUpData(motor.oriup,'command') === '작동' ? true : false}" type="button" style="box-shadow:0 0 0 0" @click="setMotorUpData(motor.oriup,'command','on')">작동</button>
-                            <button class="btn btn-outline-secondary" :class="{active: getMotorUpData(motor.oriup,'command') === '정지' ? true : false}" type="button" style="box-shadow:0 0 0 0" @click="setMotorUpData(motor.oriup,'command','off')">정지</button>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-              <td>
-                <table width="100%">
-                  <tbody>
-                    <tr v-for="(motor,index) in mainDatas.stdcvt.motors" :key="index">
-                      <td style="border-top:0px" width="50%">
-                        <input type="text" class="form-control" v-model="motor.down">
-                      </td>
-                      <td style="border-top:0px" width="50%">
-                        <div class="input-group">
-                          <input type="text" class="form-control" placeholder="" disabled :value="getMotorDownCurrent(motor.oridown)">
-                          <div class="input-group-append">
-                            <label class="input-group-text">{{getMotorDownStatus(motor.oridown)}}</label>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" style="vertical-align:middle;">스위치</th>
-              <td>
-                <table width="100%">
-                  <tbody>
-                    <tr v-for="(element,index) in mainDatas.stdcvt.switch" :key="index">
-                      <td style="border-top:0px" width="30%">
-                        <input type="text" class="form-control" v-model="element.name">
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-              <td>
-                <table width="100%">
-                  <tbody>
-                    <tr v-for="(element,index) in mainDatas.stdcvt.switch" :key="index">
-                      <td style="border-top:0px" width="30%">
-                        <input type="text" class="form-control" v-model="element.up">
-                      </td>
-                      <td style="border-top:0px;text-align:right;" width="40%">
-                        <div class="btn-group" data-toggle="buttons">
-                          <button class="btn btn-outline-primary" :class="{active: getSwitchUpData(element.oriup,'command') === '작동' ? true : false}" type="button" style="box-shadow:0 0 0 0" @click="setSwitchUpData(element.oriup,'command','on')">작동</button>
-                          <button class="btn btn-outline-secondary" :class="{active: getSwitchUpData(element.oriup,'command') === '정지' ? true : false}" type="button" style="box-shadow:0 0 0 0" @click="setSwitchUpData(element.oriup,'command','off')">정지</button>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-              <td>
-                <table width="100% ">
-                  <tbody>
-                    <tr v-for="(element,index) in mainDatas.stdcvt.switch " :key="index ">
-                      <td style="border-top:0px " width="50% ">
-                        <input type="text " class="form-control " v-model="element.down">
-                      </td>
-                      <td style="border-top:0px " width="50% ">
-                        <button type="button " class="input-group-text btn-block ">{{getSwitchDownData(element.oridown)}}</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
+      <BlockUI message="Loading..." v-show="isLoading "></BlockUI>
     </div>
-    <BlockUI message="Loading..." v-show="isLoading"></BlockUI>
   </section>
 </template>
 
 <script>
 export default {
+  components: {},
   async asyncData({ app }) {
-    let mainDatas = await app.$axios.$get('json', {})
+    let mainDatas = await app.$axios.$get('api/stdcvt', {})
+    app.store.commit('newVersion', mainDatas.stdcvt.stdcvt.version)
 
-    for (const sensor of mainDatas.stdcvt.sensors) {
-      sensor.oriup = sensor.up
-      sensor.oridown = sensor.down
+    let driveSsdriverNewOption = mainDatas.driverlist.ssdriver[0].option
+    let driveSsdriverSelected = mainDatas.driverlist.ssdriver[0].driver
+
+    let driveDsdriverNewOption = mainDatas.driverlist.dsdriver[0].option
+    let driveDsdriverSelected = mainDatas.driverlist.dsdriver[0].driver
+
+    if (mainDatas.stdcvt.ssdriver) {
+      driveSsdriverNewOption =
+        mainDatas.stdcvt.ssdriver.length > 0
+          ? mainDatas.stdcvt.ssdriver[0].option
+          : mainDatas.driverlist.ssdriver[0].option
+      driveSsdriverSelected =
+        mainDatas.stdcvt.ssdriver.length > 0
+          ? mainDatas.stdcvt.ssdriver[0].driver
+          : mainDatas.driverlist.ssdriver[0].driver
     }
 
-    for (const motor of mainDatas.stdcvt.motors) {
-      motor.oriup = motor.up
-      motor.oridown = motor.down
-    }
-
-    for (const element of mainDatas.stdcvt.switch) {
-      element.oriup = element.up
-      element.oridown = element.down
+    if (mainDatas.stdcvt.dsdriver) {
+      driveDsdriverNewOption =
+        mainDatas.stdcvt.dsdriver.length > 0
+          ? mainDatas.stdcvt.dsdriver[0].option
+          : mainDatas.driverlist.dsdriver[0].option
+      driveDsdriverSelected =
+        mainDatas.stdcvt.dsdriver.length > 0
+          ? mainDatas.stdcvt.dsdriver[0].driver
+          : mainDatas.driverlist.dsdriver[0].driver
     }
 
     return {
       mainDatas: mainDatas,
-      drive_up_new_option: mainDatas.stdcvt.upapi.option
-        ? mainDatas.stdcvt.upapi.option
-        : mainDatas.apilist.upapi[0].option,
-      drive_down_new_option: mainDatas.stdcvt.downapi.option
-        ? mainDatas.stdcvt.downapi.option
-        : mainDatas.apilist.downapi[0].option,
-      drive_up_selected: mainDatas.stdcvt.upapi.driver
-        ? mainDatas.stdcvt.upapi.driver
-        : mainDatas.apilist.upapi[0].driver,
-      drive_down_selected: mainDatas.stdcvt.downapi.driver
-        ? mainDatas.stdcvt.downapi.driver
-        : mainDatas.apilist.downapi[0].driver
+      drive_ssdriver_selected: driveSsdriverSelected,
+      drive_ssdriver_new_option: driveSsdriverNewOption,
+      drive_dsdriver_selected: driveDsdriverSelected,
+      drive_dsdriver_new_option: driveDsdriverNewOption
     }
   },
   data() {
     return {
       isLoading: false,
       valueInterVal: Function,
-      saveObject: {}
+      saveObject: {},
+      ssdError: false,
+      dsdError: false
     }
   },
-  mounted: function () {
-    this.$nextTick(function () {
-      this.valueInterVal = setInterval(() => {
-        this.getJson('value')
-      }, 10000)
-    })
-  },
+  mounted: function () {},
   beforeDestroy: function () {
     clearTimeout(this.valueInterVal)
   },
   methods: {
-    dataValidation(value) {
-      if (value > 100) {
-        alert('over')
-        value = 0
-      }
+    ssdErrorChg(error) {
+      this.ssdError = error
+    },
+    dsdErrorChg(error) {
+      this.dsdError = error
     },
     async defaultData() {
       this.isLoading = true
-      const result = await this.$axios.$get('json/default', {})
+      let result = 'Error'
+      try {
+        result = await this.$axios.$get('api/stdcvt/default', {})
+      } catch (error) {}
 
       setTimeout(() => {
         this.isLoading = false
         this.$toasted.show(
-          result === 'OK' ? '설정을 초기화 했습니다' : '설정 초기화 실패 했습니다',
+          result === 'OK'
+            ? '설정을 초기화 했습니다'
+            : '설정 초기화 실패 했습니다',
           {
             theme: 'outline',
             position: 'top-right',
@@ -279,310 +135,155 @@ export default {
       }, 500)
     },
     async saveData() {
+      if (this.ssdError || this.dsdError) {
+        alert('Json 형식이 잘못 되어있습니다 확인해 주세요.')
+        return
+      }
       this.isLoading = true
 
-      this.mainDatas.stdcvt.upapi.driver = this.drive_up_selected
-      this.mainDatas.stdcvt.downapi.driver = this.drive_down_selected
-
-      this.mainDatas.stdcvt.upapi.option = this.drive_up_new_option
-      this.mainDatas.stdcvt.downapi.option = this.drive_down_new_option
-
-      for (const sensor of this.mainDatas.stdcvt.sensors) {
-        delete sensor.oriup
-        delete sensor.oridown
+      if (this.mainDatas.stdcvt.ssdriver.length > 0) {
+        this.mainDatas.stdcvt.ssdriver[0].driver = this.drive_ssdriver_selected
+        this.mainDatas.stdcvt.ssdriver[0].option = this.drive_ssdriver_new_option
+      } else {
+        let temp = {}
+        temp['driver'] = this.drive_ssdriver_selected
+        temp['option'] = this.drive_ssdriver_new_option
+        this.mainDatas.stdcvt.ssdriver.push(temp)
       }
 
-      for (const motor of this.mainDatas.stdcvt.motors) {
-        for (const motorCommand of this.mainDatas.command.motors) {
-          if (motorCommand.up === motor.oriup) {
-            motorCommand.up = motor.up
-          }
-          if (motorCommand.down === motor.oridown) {
-            motorCommand.down = motor.down
-          }
-        }
-        delete motor.oriup
-        delete motor.oridown
+      if (this.mainDatas.stdcvt.dsdriver.length > 0) {
+        this.mainDatas.stdcvt.dsdriver[0].driver = this.drive_dsdriver_selected
+        this.mainDatas.stdcvt.dsdriver[0].option = this.drive_dsdriver_new_option
+      } else {
+        let temp = {}
+        temp['driver'] = this.drive_dsdriver_selected
+        temp['option'] = this.drive_dsdriver_new_option
+        this.mainDatas.stdcvt.dsdriver.push(temp)
       }
 
-      for (const element of this.mainDatas.stdcvt.switch) {
-        for (const elementSwitch of this.mainDatas.command.switch) {
-          if (elementSwitch.up === element.oriup) {
-            elementSwitch.up = element.up
-          }
-          if (elementSwitch.down === element.oridown) {
-            elementSwitch.down = element.down
-          }
-        }
-        delete element.oriup
-        delete element.oridown
-      }
-
-      const result = await this.$axios.$post('jsons', {
-        stdcvt: this.mainDatas.stdcvt,
-        command: this.mainDatas.command
-      })
+      try {
+        var result = await this.$axios.post(
+          'api/stdcvt/stdcvt',
+          this.mainDatas.stdcvt
+        )
+      } catch (error) {}
 
       setTimeout(() => {
         this.isLoading = false
         this.$toasted.show(
-          result === 'OK' ? '설정 변경을 완료 했습니다' : '설정 변경을 실패 했습니다',
+          result.status === 200
+            ? '설정 변경을 완료 했습니다'
+            : '설정 변경을 실패 했습니다',
           {
             theme: 'outline',
             position: 'top-right',
             duration: 2000
           }
         )
-        if (result === 'OK') {
+        if (result.status === 200) {
           this.getJsonAll()
         }
       }, 500)
     },
-    async restart() {
-      await this.$axios.$get('restart')
-    },
-    async update() {
-      await this.$axios.$get('update')
-    },
     async getJsonAll() {
-      this.$set(this, 'mainDatas', await this.$axios.$get('json', {}))
+      try {
+        let mainDatas = await this.$axios.$get('api/stdcvt', {})
+        this.mainDatas = mainDatas
 
-      if (this.mainDatas.stdcvt.upapi.driver) {
-        this.drive_up_new_option = this.mainDatas.stdcvt.upapi.option
-      } else {
-        this.drive_up_new_option = this.mainDatas.apilist.upapi[0].option
-      }
+        this.drive_ssdriver_new_option = mainDatas.driverlist.ssdriver[0].option
+        this.drive_ssdriver_selected = mainDatas.driverlist.ssdriver[0].driver
 
-      if (this.mainDatas.stdcvt.downapi.driver) {
-        this.drive_down_new_option = this.mainDatas.stdcvt.downapi.option
-      } else {
-        this.drive_down_new_option = this.mainDatas.apilist.downapi[0].option
-      }
+        this.drive_dsdriver_new_option = mainDatas.driverlist.dsdriver[0].option
+        this.drive_dsdriver_selected = mainDatas.driverlist.dsdriver[0].driver
 
-      for (const sensor of this.mainDatas.stdcvt.sensors) {
-        sensor.oriup = sensor.up
-        sensor.oridown = sensor.down
-      }
+        if (mainDatas.stdcvt.ssdriver) {
+          this.drive_ssdriver_new_option =
+            mainDatas.stdcvt.ssdriver.length > 0
+              ? mainDatas.stdcvt.ssdriver[0].option
+              : mainDatas.driverlist.ssdriver[0].option
+          this.drive_ssdriver_selected =
+            mainDatas.stdcvt.ssdriver.length > 0
+              ? mainDatas.stdcvt.ssdriver[0].driver
+              : mainDatas.driverlist.ssdriver[0].driver
+        }
 
-      for (const motor of this.mainDatas.stdcvt.motors) {
-        motor.oriup = motor.up
-        motor.oridown = motor.down
-      }
-
-      for (const element of this.mainDatas.stdcvt.switch) {
-        element.oriup = element.up
-        element.oridown = element.down
-      }
-
-      this.$set(
-        this,
-        'drive_up_selected',
-        this.mainDatas.stdcvt.upapi.driver
-          ? this.mainDatas.stdcvt.upapi.driver
-          : this.mainDatas.apilist.upapi[0].driver
-      )
-      this.$set(
-        this,
-        'drive_down_selected',
-        this.mainDatas.stdcvt.downapi.driver
-          ? this.mainDatas.stdcvt.downapi.driver
-          : this.mainDatas.apilist.downapi[0].driver
-      )
-    },
-    async getJson(file) {
-      this.$set(this.mainDatas, file, await this.$axios.$get('json/' + file))
-    },
-    getSensorData(id, type) {
-      for (const sensor of this.mainDatas.value.sensors) {
-        if (type === 'up') {
-          if (sensor.up === id) {
-            return sensor.upvalue
-          }
-        } else {
-          if (sensor.down === id) {
-            return sensor.downvalue
-          }
+        if (mainDatas.stdcvt.dsdriver) {
+          this.drive_dsdriver_new_option =
+            mainDatas.stdcvt.dsdriver.length > 0
+              ? mainDatas.stdcvt.dsdriver[0].option
+              : mainDatas.driverlist.dsdriver[0].option
+          this.drive_dsdriver_selected =
+            mainDatas.stdcvt.dsdriver.length > 0
+              ? mainDatas.stdcvt.dsdriver[0].driver
+              : mainDatas.driverlist.dsdriver[0].driver
         }
-      }
-    },
-    async setMotorUpData(id, type, value) {
-      for (const motor of this.mainDatas.command.motors) {
-        if (motor.up === id) {
-          if (type === 'target') {
-            motor.target = Number(value)
-            if (Number(value) > 100) {
-              motor.target = 100
-            } else if (Number(value) < 0) {
-              motor.target = 0
-            }
-          } else if (type === 'command') {
-            this.isLoading = true
-            motor.command = value
-            const result = await this.$axios.$post(
-              'json/command',
-              this.mainDatas.command
-            )
-
-            setTimeout(() => {
-              this.isLoading = false
-              this.$toasted.show(
-                result === 'OK' ? '설정 변경을 완료 했습니다' : '설정 변경을 실패 했습니다',
-                {
-                  theme: 'outline',
-                  position: 'top-right',
-                  duration: 2000
-                }
-              )
-            }, 500)
-          }
-          break
-        }
-      }
-    },
-    getMotorUpData(id, type) {
-      for (const motor of this.mainDatas.command.motors) {
-        if (motor.up === id) {
-          if (type === 'target') {
-            return motor.target
-          } else if (type === 'command') {
-            return motor.command === 'on' ? '작동' : '정지'
-          }
-        }
-      }
-    },
-    getMotorDownCurrent(id) {
-      let text = '-'
-      for (const motor of this.mainDatas.value.motors) {
-        if (motor.down === id) {
-          text = motor.current
-          break
-        }
-      }
-      return text
-    },
-    getMotorDownStatus(id) {
-      let text = 'ㅤㅤㅤ '
-      for (const motor of this.mainDatas.value.motors) {
-        if (motor.down === id) {
-          text = motor.status === 'on' ? '작동' : '정지'
-          break
-        }
-      }
-      return text
-    },
-    async setSwitchUpData(id, type, value) {
-      for (const element of this.mainDatas.command.switch) {
-        if (element.up === id) {
-          if (type === 'target') {
-            element.target = Number(value)
-          } else if (type === 'command') {
-            this.isLoading = true
-            element.command = value
-            const result = await this.$axios.$post(
-              'json/command',
-              this.mainDatas.command
-            )
-
-            setTimeout(() => {
-              this.isLoading = false
-              this.$toasted.show(
-                result === 'OK' ? '설정 변경을 완료 했습니다' : '설정 변경을 실패 했습니다',
-                {
-                  theme: 'outline',
-                  position: 'top-right',
-                  duration: 2000
-                }
-              )
-            }, 500)
-          }
-          break
-        }
-      }
-    },
-    getSwitchUpData(id, type) {
-      for (const element of this.mainDatas.command.switch) {
-        if (element.up === id) {
-          if (type === 'target') {
-            return element.target
-          } else if (type === 'command') {
-            return element.command === 'on' ? '작동' : '정지'
-          }
-        }
-      }
-    },
-    getSwitchDownData(id, type) {
-      let text = '-'
-      for (const element of this.mainDatas.value.switch) {
-        if (element.down === id) {
-          text = element.status === 'on' ? '작동' : '정지'
-          break
-        }
-      }
-      return text
-    },
-    setDriveOpUp(value) {
-      this.drive_up_new_option = value
+      } catch (error) {}
     }
   },
   watch: {},
   computed: {
-    driveUpSelected: {
+    driveSsdSelected: {
       get() {
-        return this.drive_up_selected
+        return this.drive_ssdriver_selected
       },
       set(newValue) {
-        this.drive_up_selected = newValue
+        this.drive_ssdriver_selected = newValue
 
         if (
-          this.mainDatas.stdcvt.upapi.option &&
-          this.mainDatas.stdcvt.upapi.driver === this.drive_up_selected
+          this.mainDatas.stdcvt.ssdriver &&
+          this.mainDatas.stdcvt.ssdriver.length > 0 &&
+          this.mainDatas.stdcvt.ssdriver[0].option &&
+          this.mainDatas.stdcvt.ssdriver[0].driver ===
+            this.drive_ssdriver_selected
         ) {
-          this.drive_up_new_option = this.mainDatas.stdcvt.upapi.option
+          this.drive_ssdriver_new_option = this.mainDatas.stdcvt.ssdriver[0].option
         } else {
-          for (const element of this.mainDatas.apilist.upapi) {
-            if (element.driver === this.drive_up_selected) {
-              this.drive_up_new_option = element.option
+          for (const element of this.mainDatas.driverlist.ssdriver) {
+            if (element.driver === this.drive_ssdriver_selected) {
+              this.drive_ssdriver_new_option = element.option
               break
             }
           }
         }
       }
     },
-    driveDownSelected: {
+    driveDsdSelected: {
       get() {
-        return this.drive_down_selected
+        return this.drive_dsdriver_selected
       },
       set(newValue) {
-        this.drive_down_selected = newValue
+        this.drive_dsdriver_selected = newValue
+
         if (
-          this.mainDatas.stdcvt.downapi.option &&
-          this.mainDatas.stdcvt.downapi.driver === this.drive_down_selected
+          this.mainDatas.stdcvt.dsdriver[0].option &&
+          this.mainDatas.stdcvt.dsdriver[0].driver ===
+            this.drive_dsdriver_selected
         ) {
-          this.drive_down_new_option = this.mainDatas.stdcvt.downapi.option
+          this.drive_dsdriver_new_option = this.mainDatas.stdcvt.dsdriver[0].option
         } else {
-          for (const element of this.mainDatas.apilist.downapi) {
-            if (element.driver === this.drive_down_selected) {
-              this.drive_down_new_option = element.option
+          for (const element of this.mainDatas.driverlist.dsdriver) {
+            if (element.driver === this.drive_dsdriver_selected) {
+              this.drive_dsdriver_new_option = element.option
               break
             }
           }
         }
       }
     },
-    getDriveOpUp: {
+    getDriveOpSsd: {
       get() {
-        return JSON.stringify(this.drive_up_new_option)
+        return this.drive_ssdriver_new_option
       },
       set(newValue) {
-        this.drive_up_new_option = JSON.parse(newValue)
+        this.drive_ssdriver_new_option = newValue
       }
     },
-    getDriveOpDown: {
+    getDriveOpDsd: {
       get() {
-        return JSON.stringify(this.drive_down_new_option)
+        return this.drive_dsdriver_new_option
       },
       set(newValue) {
-        this.drive_down_new_option = JSON.parse(newValue)
+        this.drive_dsdriver_new_option = newValue
       }
     }
   }
@@ -601,5 +302,20 @@ export default {
 }
 .table td {
   text-align: center;
+}
+
+.hr {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #eeeeee -moz-use-text-color #ffffff;
+  border-style: solid none;
+  border-width: 1px 0;
+  margin: 18px 0;
+}
+
+.jsoneditor-vue {
+  height: 450px;
 }
 </style>

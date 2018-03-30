@@ -1,5 +1,12 @@
 <template>
   <div>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand">STDCVT&nbsp;&nbsp;v.{{ $store.state.version }}</a>
+      <nav class="nav">
+        <nuxt-link class="nav-link" to="/" exact>Driver</nuxt-link>
+        <nuxt-link class="nav-link" to="/sensor">Devices</nuxt-link>
+      </nav>
+    </nav>
     <nuxt/>
   </div>
 </template>
@@ -21,5 +28,12 @@ html {
 *:after {
   box-sizing: border-box;
   margin: 0;
+}
+
+.nuxt-link-active {
+  color: #007bff;
+}
+a {
+  color: #ccc;
 }
 </style>

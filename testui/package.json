@@ -1,5 +1,5 @@
 {
-  "name": "ict",
+  "name": "STDCVT",
   "version": "1.0.0",
   "description": "My classy Nuxt.js project",
   "author": "용무",
@@ -13,32 +13,29 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^4.5.2",
-    "asyncawait": "^1.0.6",
+    "@nuxtjs/axios": "^5.1.1",
     "body-parser": "^1.18.2",
-    "bootstrap": "^4.0.0-beta.2",
-    "bootstrap-vue": "^1.4.1",
-    "express": "^4.16.2",
-    "jquery": "^3.3.1",
+    "bootstrap-vue": "^2.0.0-rc.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "jsoneditor": "^5.14.1",
     "jsonfile": "^4.0.0",
-    "nuxt": "^1.1.1",
+    "mysql2": "^1.5.3",
+    "nuxt": "^1.4.0",
     "vue-blockui": "^1.1.6",
     "vue-toasted": "^1.1.24"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-es2017": "^6.24.1",
-    "cross-env": "^5.1.3",
-    "eslint": "^4.15.0",
-    "eslint-config-standard": "^11.0.0-beta.0",
-    "eslint-loader": "^1.9.0",
-    "eslint-plugin-html": "^3.1.1",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^5.2.1",
-    "eslint-plugin-promise": "^3.6.0",
+    "babel-eslint": "^8.2.2",
+    "cross-env": "^5.1.4",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-html": "^4.0.2",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
-    "nodemon": "^1.14.11"
+    "nodemon": "^1.17.2"
   }
 }
