@@ -10,7 +10,7 @@ const {
 } = require('nuxt')
 const app = express()
 app.use(cors())
-const port = process.env.PORT || 80
+const port = process.env.PORT || 2525
 
 global.appRoot = path.resolve(__dirname, '../')
 
