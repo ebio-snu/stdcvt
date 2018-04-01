@@ -8,8 +8,7 @@
   "ssdriver": [{
     "driver": "../cvtdriver/lib/libsssample.so",
     "option": {
-      "#host": "tcp://127.0.0.1:3306",
-      "host": "tcp://220.90.136.106:3306",
+      "host": "tcp://127.0.0.1:3306",
       "user": "ssdriver",
       "pass": "sssample",
       "db": "sssample"

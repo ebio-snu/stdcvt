@@ -58,16 +58,18 @@ public:
         for (unsigned int i = 0; i < _dsdrivers.size(); i++) {
             if (i != drvidx)  {
                 ret = _dsdrivers[i]->sharedevice (pdev);
-                LOG(INFO) << "  DSDriver " << i << " : " 
-                    << (ret ? "shared" : "not shared");
+                LOG(INFO) << "  DSDriver " << i << " : device[" 
+                    << pdev->getid() << (ret ? "] shared" : "] not shared");
             }
         }
         ret = _ssdriver->sharedevice (pdev);
-        LOG(INFO) << "  SSDriver : " << (ret ? "shared" : "not shared");
+        LOG(INFO) << "  SSDriver : device[" << pdev->getid() 
+            << (ret ? "] shared" : "] not shared");
     }
 
     void preprocess() {
         // preprocess
+        LOG(INFO) << "Pre-process";
         for (unsigned int i = 0; i < _dsdrivers.size(); i++) {
             _dsdrivers[i]->preprocess ();
         }
@@ -107,6 +109,7 @@ public:
 
     void postprocess () {
         // postprocess
+        LOG(INFO) << "Post-process";
         for (unsigned int i = 0; i < _dsdrivers.size(); i++) {
             _dsdrivers[i]->postprocess ();
         }
