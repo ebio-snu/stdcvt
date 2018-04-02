@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cd ..
+git pull
+git submodule update
+cd cvtdriver
+mkdir build
+cd build
+rm -rf *
+cmake ..
+make
+cd ../..
+mkdir build
+cd build
+rm -rf *
+cmake ..
+make

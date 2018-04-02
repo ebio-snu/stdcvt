@@ -4,6 +4,7 @@ var express = require('express')
 var router = express.Router()
 var path = require('path')
 var fs = require('fs')
+var exec = require('child_process').exec
 
 var pool = mysql.createPool({
   host: 'localhost',
@@ -78,7 +79,7 @@ router.get('/stdcvt/value', function (req, res) {
 router.post('/stdcvt/command', async function (req, res) {
   const result = await insertcommand(req.body)
   if (result !== undefined) {
-    res.send(200, result)
+    res.status(200).send(result)
   } else {
     res.sendStatus(500)
   }
@@ -96,13 +97,33 @@ router.post('/stdcvt/stdcvt', function (req, res) {
 })
 
 router.get('/stdcvt/update', function (req, res) {
-  console.log('update : git pull')
-  res.sendStatus(200)
+  console.log('update : git pull & compile')
+  var child = exec('../scripts/update', 
+    function (error, stdout, stderr) {
+      if (error !== null) {
+        console.log('update error: ' + error)
+        res.sendStatus(500)
+      } else {
+        console.log('update success.')
+        res.sendStatus(200)
+      }
+    }
+  );
 })
 
 router.get('/stdcvt/restart', function (req, res) {
   console.log('update : service stdcvt restart')
-  res.sendStatus(200)
+  var child = exec('service stdcvt restart', 
+    function (error, stdout, stderr) {
+      if (error !== null) {
+        console.log('update error: ' + error)
+        res.sendStatus(500)
+      } else {
+        console.log('update success.')
+        res.sendStatus(200)
+      }
+    }
+  );
 })
 
 router.get('/stdcvt/info', function (req, res) {

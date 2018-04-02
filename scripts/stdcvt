@@ -1,0 +1,39 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          stdcvt
+# Required-Start:    mysql 
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start daemon at boot time
+# Description:       Enable welgro service provided by daemon.
+### END INIT INFO
+
+WORK_DIR="/home/pi/stdcvt/build"
+
+case "$1" in
+  start)
+    echo "Starting server"
+    cd "$WORK_DIR"
+    ./stdcvt
+    cd ../testui
+    forever stop server/index.js
+    forever start server/index.js
+    ;;
+  stop)
+    echo "Stopping server"
+    cd "$WORK_DIR"
+    ps -ef | grep './stdcvt' | grep -v grep | awk '{print $2}' | xargs kill > /dev/null
+    cd ../testui
+    forever stop server/index.js
+    ;;
+
+  *)
+    echo "Usage: /etc/init.d/stdcvt {start|stop}"
+    exit 1
+    ;;
+esac
+exit 0
+
+
