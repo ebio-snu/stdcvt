@@ -18,15 +18,15 @@ case "$1" in
     cd "$WORK_DIR"
     ./stdcvt
     cd ../testui
-    forever stop server/index.js
-    forever start server/index.js
+    NODE_ENV=production forever stop server/index.js
+    NODE_ENV=production forever start server/index.js
     ;;
   stop)
     echo "Stopping server"
     cd "$WORK_DIR"
     ps -ef | grep './stdcvt' | grep -v grep | awk '{print $2}' | xargs kill > /dev/null
     cd ../testui
-    forever stop server/index.js
+    NODE_ENV=production forever stop server/index.js
     ;;
 
   *)
