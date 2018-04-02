@@ -28,7 +28,15 @@ case "$1" in
     cd ../testui
     NODE_ENV=production forever stop server/index.js
     ;;
-
+  restart)
+    echo "Restarting server"
+    cd "$WORK_DIR"
+    ps -ef | grep './stdcvt' | grep -v grep | awk '{print $2}' | xargs kill > /dev/null
+    ./stdcvt
+    cd ../testui
+    NODE_ENV=production forever stop server/index.js
+    NODE_ENV=production forever start server/index.js
+    ;;
   *)
     echo "Usage: /etc/init.d/stdcvt {start|stop}"
     exit 1
