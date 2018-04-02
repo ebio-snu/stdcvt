@@ -15,3 +15,5 @@ cd build
 rm -rf *
 cmake ..
 make
+cd ../testui
+npm run build
