@@ -7,10 +7,12 @@
           <div class="row">
             <div class="navbar">Driver</div>
             <div class="col" style="text-align: right; padding-right: 0px;">
+            <!--
               <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-primary btn-sm mr-2" @click="restart">Update</button>
               <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-warning btn-sm mr-2" @click="update">Restart</button>
               <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-success btn-sm mr-2" @click="defaultData">Default</button>
               <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-info btn-sm mr-2" @click="saveData">Save</button>
+              -->
             </div>
           </div>
         </div>

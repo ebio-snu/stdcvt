@@ -3,8 +3,8 @@
     <nav class="navbar navbar-light bg-light">
       <a class="navbar-brand">STDCVT&nbsp;&nbsp;v.{{ $store.state.version }}</a>
       <nav class="nav">
-        <nuxt-link class="nav-link" to="/" exact>Driver</nuxt-link>
         <nuxt-link class="nav-link" to="/sensor">Devices</nuxt-link>
+        <nuxt-link class="nav-link" to="/" exact>Driver</nuxt-link>
       </nav>
     </nav>
     <nuxt/>

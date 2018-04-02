@@ -2,24 +2,24 @@
   "publicPath": "/_nuxt/",
   "all": [
     "img/jsoneditor-icons.bfab7b1.svg",
-    "pages/sensor.0f947efaf597f64c0726.js",
-    "pages/index.3b2d0065f81d1f0d8825.js",
-    "layouts/default.6a70078870183be04972.js",
+    "pages/sensor.133f8605487645566c3d.js",
+    "pages/index.067909f94f69536297a7.js",
+    "layouts/default.bce209db59d00ac6bf98.js",
     "vendor.c90a7c59d35b647b21ff.js",
     "app.166cf27a6051df2e0809.js",
-    "manifest.26a72f88f18f2cc6f0e1.js",
+    "manifest.d37d041109f23d4b7750.js",
     "index.spa.html",
     "index.ssr.html"
   ],
   "initial": [
-    "manifest.26a72f88f18f2cc6f0e1.js",
+    "manifest.d37d041109f23d4b7750.js",
     "vendor.c90a7c59d35b647b21ff.js",
     "app.166cf27a6051df2e0809.js"
   ],
   "async": [
-    "pages/sensor.0f947efaf597f64c0726.js",
-    "pages/index.3b2d0065f81d1f0d8825.js",
-    "layouts/default.6a70078870183be04972.js"
+    "pages/sensor.133f8605487645566c3d.js",
+    "pages/index.067909f94f69536297a7.js",
+    "layouts/default.bce209db59d00ac6bf98.js"
   ],
   "modules": {
     "11886234": [

@@ -7,8 +7,10 @@
           <div class="row">
             <div class="navbar">Devices</div>
             <div class="col " style="text-align: right; padding-right: 0px; ">
+            <!--
               <button style="padding-left: 2px;padding-right: 2px; " type="button " class="btn btn-primary btn-sm mr-2 " @click="restart ">Update</button>
               <button style="padding-left: 2px;padding-right: 2px; " type="button " class="btn btn-warning btn-sm mr-2 " @click="update ">Restart</button>
+              -->
             </div>
           </div>
         </div>
