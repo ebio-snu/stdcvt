@@ -13,9 +13,11 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.1.1",
+    "@tweenjs/tween.js": "^17.2.0",
+    "color": "^3.0.0",
+    "@nuxtjs/axios": "^5.3.1",
     "body-parser": "^1.18.2",
-    "bootstrap-vue": "^2.0.0-rc.2",
+    "bootstrap-vue": "^2.0.0-rc.6",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "jsoneditor": "^5.14.1",
@@ -33,11 +35,11 @@
     "eslint-config-vue": "^2.0.2",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-html": "^4.0.2",
-    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-import": "^2.10.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-vue": "^4.4.0",
-    "nodemon": "^1.17.2"
+    "nodemon": "^1.17.3"
   }
 }

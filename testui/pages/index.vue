@@ -7,12 +7,12 @@
           <div class="row">
             <div class="navbar">Driver</div>
             <div class="col" style="text-align: right; padding-right: 0px;">
-            <!--
-              <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-primary btn-sm mr-2" @click="restart">Update</button>
+
+              <!-- <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-primary btn-sm mr-2" @click="restart">Update</button>
               <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-warning btn-sm mr-2" @click="update">Restart</button>
               <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-success btn-sm mr-2" @click="defaultData">Default</button>
-              <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-info btn-sm mr-2" @click="saveData">Save</button>
-              -->
+              <button style="padding-left: 2px;padding-right: 2px;" type="button" class="btn btn-info btn-sm mr-2" @click="saveData">Save</button> -->
+
             </div>
           </div>
         </div>
@@ -22,7 +22,7 @@
               <div style="text-align: center;">SSDRIVER
               </div>
               파일명
-              <b-form-select class="mb-4 mt-2" value-field="driver" text-field="driver" v-model="driveSsdSelected" :options="mainDatas.driverlist.ssdriver">
+              <b-form-select class="mb-4 mt-2" v-model="driveSsdSelected" :options="ssdriverList">
               </b-form-select>
               옵션
               <jsoneditor class="mt-2" v-model="getDriveOpSsd" mode="code" @json-error="ssdErrorChg" />
@@ -33,7 +33,7 @@
               <div style="text-align: center;">DSDRIVER
               </div>
               파일명
-              <b-form-select class="mb-4 mt-2" value-field="driver" text-field="driver" v-model="driveDsdSelected" :options="mainDatas.driverlist.dsdriver">
+              <b-form-select class="mb-4 mt-2" v-model="driveDsdSelected" :options="dsdriverList">
               </b-form-select>
               옵션
               <jsoneditor class="mt-2" v-model="getDriveOpDsd" mode="code" @json-error="dsdErrorChg" />
@@ -114,24 +114,23 @@ export default {
     },
     async defaultData() {
       this.isLoading = true
-      let result = 'Error'
+
       try {
-        result = await this.$axios.$get('api/stdcvt/default', {})
-      } catch (error) {}
+        var result = await this.$axios.get('api/stdcvt/default', {})
+        var msg = '설정을 초기화 했습니다'
+      } catch (error) {
+        console.log(error)
+        msg = '설정 초기화 실패 했습니다'
+      }
 
       setTimeout(() => {
         this.isLoading = false
-        this.$toasted.show(
-          result === 'OK'
-            ? '설정을 초기화 했습니다'
-            : '설정 초기화 실패 했습니다',
-          {
-            theme: 'outline',
-            position: 'top-right',
-            duration: 2000
-          }
-        )
-        if (result === 'OK') {
+        this.$toasted.show(msg, {
+          theme: 'outline',
+          position: 'top-right',
+          duration: 2000
+        })
+        if (result !== undefined && result.status === 200) {
           this.getJsonAll()
         }
       }, 500)
@@ -168,21 +167,20 @@ export default {
           'api/stdcvt/stdcvt',
           this.mainDatas.stdcvt
         )
-      } catch (error) {}
+        var msg = '설정 변경을 완료 했습니다'
+      } catch (error) {
+        console.log(error)
+        msg = '설정 변경을 실패 했습니다'
+      }
 
       setTimeout(() => {
         this.isLoading = false
-        this.$toasted.show(
-          result.status === 200
-            ? '설정 변경을 완료 했습니다'
-            : '설정 변경을 실패 했습니다',
-          {
-            theme: 'outline',
-            position: 'top-right',
-            duration: 2000
-          }
-        )
-        if (result.status === 200) {
+        this.$toasted.show(msg, {
+          theme: 'outline',
+          position: 'top-right',
+          duration: 2000
+        })
+        if (result !== undefined && result.status === 200) {
           this.getJsonAll()
         }
       }, 500)
@@ -224,12 +222,36 @@ export default {
   },
   watch: {},
   computed: {
+    ssdriverList: {
+      get() {
+        return this.mainDatas.driverlist.ssdriver.map(item => {
+          const name = item.driver.split('/')
+          return name[name.length - 1]
+        })
+      }
+    },
+    dsdriverList: {
+      get() {
+        return this.mainDatas.driverlist.dsdriver.map(item => {
+          const name = item.driver.split('/')
+          return name[name.length - 1]
+        })
+      }
+    },
     driveSsdSelected: {
       get() {
-        return this.drive_ssdriver_selected
+        // return this.drive_ssdriver_selected
+        const name = this.drive_ssdriver_selected.split('/')
+        return name[name.length - 1]
       },
       set(newValue) {
-        this.drive_ssdriver_selected = newValue
+        for (const item of this.mainDatas.driverlist.ssdriver) {
+          const name = item.driver.split('/')
+          if (name[name.length - 1] === newValue) {
+            this.drive_ssdriver_selected = item.driver
+            break
+          }
+        }
 
         if (
           this.mainDatas.stdcvt.ssdriver &&
@@ -251,10 +273,17 @@ export default {
     },
     driveDsdSelected: {
       get() {
-        return this.drive_dsdriver_selected
+        const name = this.drive_dsdriver_selected.split('/')
+        return name[name.length - 1]
       },
       set(newValue) {
-        this.drive_dsdriver_selected = newValue
+        for (const item of this.mainDatas.driverlist.dsdriver) {
+          const name = item.driver.split('/')
+          if (name[name.length - 1] === newValue) {
+            this.drive_dsdriver_selected = item.driver
+            break
+          }
+        }
 
         if (
           this.mainDatas.stdcvt.dsdriver[0].option &&

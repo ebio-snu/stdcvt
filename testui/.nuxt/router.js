@@ -4,6 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const _3fdb9d16 = () => import('../pages/sensor.vue' /* webpackChunkName: "pages/sensor" */).then(m => m.default || m)
+const _083b1db1 = () => import('../pages/devices.vue' /* webpackChunkName: "pages/devices" */).then(m => m.default || m)
 const _62dad3b4 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 
 
@@ -68,6 +69,11 @@ export function createRouter () {
 			path: "/sensor",
 			component: _3fdb9d16,
 			name: "sensor"
+		},
+		{
+			path: "/devices",
+			component: _083b1db1,
+			name: "devices"
 		},
 		{
 			path: "/",

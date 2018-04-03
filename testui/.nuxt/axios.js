@@ -98,6 +98,9 @@ const setupProgress = (axios, ctx) => {
   })
 
   const onProgress = e => {
+    if (!currentRequests) {
+      return
+    }
     const progress = ((e.loaded * 100) / (e.total * currentRequests))
     $loading().set(Math.min(100, progress))
   }

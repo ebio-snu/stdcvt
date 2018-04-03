@@ -1,5 +1,5 @@
 var path = require('path')
-const apiJson = require('./api/json.js')
+const apiStdcvt = require('./api/stdcvt.js')
 const express = require('express')
 const bodyParser = require('body-parser')
 var cors = require('cors')
@@ -24,7 +24,7 @@ app.use(bodyParser.json())
 app.set('port', port)
 
 // Import API Routes
-app.use('/api', apiJson)
+app.use('/api', apiStdcvt)
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')

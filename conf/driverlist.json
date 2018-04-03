@@ -1,6 +1,6 @@
 {
   "ssdriver": [{
-    "driver": "libsssample.so",
+    "driver": "../cvtdriver/lib/libsssample.so",
     "option": {
       "host": "tcp://127.0.0.1:3306",
       "user": "ssdriver",
@@ -9,7 +9,7 @@
     }
   }],
   "dsdriver": [{
-    "driver": "libdssample.so",
+    "driver": "../cvtdriver/lib/libdssample.so",
     "option": {
       "port": "/dev/ttyUSB0",
       "baudrate": 115200,
