@@ -2,23 +2,23 @@
   "publicPath": "/_nuxt/",
   "all": [
     "img/jsoneditor-icons.bfab7b1.svg",
-    "pages/devices.ec7a10e3eeb64ee42fb1.js",
+    "pages/devices.12aa2501e25b83164da7.js",
     "pages/sensor.14916ebb77bfb92f61ef.js",
     "pages/index.0689d420d0ecc31c40a4.js",
     "layouts/default.31904809ef03a56cfff6.js",
     "vendor.38ea1a9113c8ccd12037.js",
     "app.5bc64ce83b711a686a05.js",
-    "manifest.3ef9d16d978ad407b4f9.js",
+    "manifest.4983ae6233bc083ae6c5.js",
     "index.spa.html",
     "index.ssr.html"
   ],
   "initial": [
-    "manifest.3ef9d16d978ad407b4f9.js",
+    "manifest.4983ae6233bc083ae6c5.js",
     "vendor.38ea1a9113c8ccd12037.js",
     "app.5bc64ce83b711a686a05.js"
   ],
   "async": [
-    "pages/devices.ec7a10e3eeb64ee42fb1.js",
+    "pages/devices.12aa2501e25b83164da7.js",
     "pages/sensor.14916ebb77bfb92f61ef.js",
     "pages/index.0689d420d0ecc31c40a4.js",
     "layouts/default.31904809ef03a56cfff6.js"

@@ -13,11 +13,11 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@tweenjs/tween.js": "^17.2.0",
-    "color": "^3.0.0",
     "@nuxtjs/axios": "^5.3.1",
+    "@tweenjs/tween.js": "^17.2.0",
     "body-parser": "^1.18.2",
     "bootstrap-vue": "^2.0.0-rc.6",
+    "color": "^3.0.0",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "jsoneditor": "^5.14.1",
