@@ -168,6 +168,7 @@ export default {
   },
   mounted: function () {
     this.valueInterVal = setInterval(() => {
+      console.log ("timeout");
       this.getJsonAll()
     }, 5000)
   },
