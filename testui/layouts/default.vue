@@ -11,6 +11,12 @@
   </div>
 </template>
 
+<script>
+//export default {
+//  $axios.defaults.baseURL = location.href;
+//}
+</script>
+
 <style>
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',

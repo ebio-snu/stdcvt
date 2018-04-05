@@ -5,23 +5,23 @@
     "pages/devices.b1737904b6db16042496.js",
     "pages/sensor.14916ebb77bfb92f61ef.js",
     "pages/index.0689d420d0ecc31c40a4.js",
-    "layouts/default.31904809ef03a56cfff6.js",
+    "layouts/default.d120d522134ac4b21e3c.js",
     "vendor.38ea1a9113c8ccd12037.js",
-    "app.e36e3244b0b38c88987b.js",
-    "manifest.3cb4d0a34b6e44ae4b03.js",
+    "app.3b02e5d71158bdc0a67c.js",
+    "manifest.de58227af4d9c861887a.js",
     "index.spa.html",
     "index.ssr.html"
   ],
   "initial": [
-    "manifest.3cb4d0a34b6e44ae4b03.js",
+    "manifest.de58227af4d9c861887a.js",
     "vendor.38ea1a9113c8ccd12037.js",
-    "app.e36e3244b0b38c88987b.js"
+    "app.3b02e5d71158bdc0a67c.js"
   ],
   "async": [
     "pages/devices.b1737904b6db16042496.js",
     "pages/sensor.14916ebb77bfb92f61ef.js",
     "pages/index.0689d420d0ecc31c40a4.js",
-    "layouts/default.31904809ef03a56cfff6.js"
+    "layouts/default.d120d522134ac4b21e3c.js"
   ],
   "modules": {
     "11886234": [
@@ -670,6 +670,9 @@
     "102d6ecc": [
       5,
       0
+    ],
+    "30a1f520": [
+      4
     ],
     "5edcd1f0": [
       5,
@@ -1392,6 +1395,13 @@
       5,
       0
     ],
+    "ea7e7616": [
+      6
+    ],
+    "629e580d": [
+      5,
+      0
+    ],
     "07b00f89": [
       6
     ],
@@ -1624,9 +1634,6 @@
       5,
       0
     ],
-    "ea7e7616": [
-      6
-    ],
     "3a028b60": [
       5,
       0
@@ -1651,14 +1658,6 @@
       0
     ],
     "4e03623c": [
-      5,
-      0
-    ],
-    "2f3979ca": [
-      5,
-      0
-    ],
-    "629e580d": [
       5,
       0
     ],
@@ -1806,6 +1805,10 @@
       5,
       0
     ],
+    "2f3979ca": [
+      5,
+      0
+    ],
     "91dd560a": [
       5,
       0
@@ -1827,6 +1830,9 @@
     "153c6932": [
       5,
       0
+    ],
+    "44ea346e": [
+      6
     ],
     "09dd6e58": [
       5,

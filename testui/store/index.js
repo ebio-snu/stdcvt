@@ -10,6 +10,11 @@ const createStore = () => {
       newVersion(state, version) {
         state.version = version
       }
+    },
+    actions: {
+      foo() {
+        return axios.get('/api/stdcvt');
+      }
     }
   })
 }

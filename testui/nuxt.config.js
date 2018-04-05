@@ -54,6 +54,10 @@ module.exports = {
     ssr: false
   },
   {
+    src: '~/plugins/axios',
+  //  ssr: false
+  },
+  {
     src: '~/plugins/jsoneditor',
     ssr: false
   },
@@ -68,21 +72,17 @@ module.exports = {
    */
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
-    //'@nuxtjs/axios',
+    '@nuxtjs/axios',
     // Doc: https://bootstrap-vue.js.org/docs/
     'bootstrap-vue/nuxt'
   ],
 
   /*
    ** Axios module configuration
-  axios: {
-    proxy: true
-  },
-  proxy: {
-    //'/api/stdcvt' : 'http://' + process.env.IP + ':8880/api/stdcvt'
-    '/' : 'http://' + process.env.IP + ':8880'
-  },
    */
+  axios: {
+    browserBaseURL: '/'
+  },
 
   /*
    ** Build configuration
@@ -94,7 +94,8 @@ module.exports = {
     extend(config, ctx) {
       // Run ESLint on save
       config.devtool = 'eval-source-map'
-      if (ctx.isDev && ctx.isClient) {
+      //if (ctx.isDev && ctx.isClient) {
+      if (ctx.isDev && process.client) {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
