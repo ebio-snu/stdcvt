@@ -6,8 +6,7 @@
 
 //Vue.use(axios)
 
-export default function ({ $axios, isServer }) {
-  console.log('axios baseURL changed.')
-  if (isServer)
+export default function ({ $axios}) {
+  if (process.server)
     $axios.defaults.baseURL = 'http://' + process.env.IP + ':8880'
 }
