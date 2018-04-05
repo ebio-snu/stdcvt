@@ -13,7 +13,6 @@ import { createStore } from './store.js'
 
 /* Plugins */
 import nuxt_plugin_bootstrapvue_b1f29232 from 'nuxt_plugin_bootstrapvue_b1f29232' // Source: ./bootstrap-vue.js
-import nuxt_plugin_axios_5563de90 from 'nuxt_plugin_axios_5563de90' // Source: ./axios.js
 import nuxt_plugin_blockui_690c5d6c from 'nuxt_plugin_blockui_690c5d6c' // Source: ../plugins/block-ui (ssr: false)
 import nuxt_plugin_toast_3357971e from 'nuxt_plugin_toast_3357971e' // Source: ../plugins/toast (ssr: false)
 import nuxt_plugin_jsoneditor_79c2ff6a from 'nuxt_plugin_jsoneditor_79c2ff6a' // Source: ../plugins/jsoneditor (ssr: false)
@@ -157,7 +156,6 @@ async function createApp (ssrContext) {
   // Plugin execution
   
   if (typeof nuxt_plugin_bootstrapvue_b1f29232 === 'function') await nuxt_plugin_bootstrapvue_b1f29232(app.context, inject)
-  if (typeof nuxt_plugin_axios_5563de90 === 'function') await nuxt_plugin_axios_5563de90(app.context, inject)
   
   if (process.browser) { 
     if (typeof nuxt_plugin_blockui_690c5d6c === 'function') await nuxt_plugin_blockui_690c5d6c(app.context, inject)

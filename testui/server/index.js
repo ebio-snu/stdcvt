@@ -10,7 +10,9 @@ const {
 } = require('nuxt')
 const app = express()
 app.use(cors())
-const port = process.env.PORT || 2525
+const port = process.env.PORT || 8880 
+const ip = process.env.IP
+console.log("ip : ", ip)
 
 global.appRoot = path.resolve(__dirname, '../')
 
@@ -21,6 +23,7 @@ app.use(bodyParser.urlencoded({
 // parse application/json
 app.use(bodyParser.json())
 
+app.set('ip', ip)
 app.set('port', port)
 
 // Import API Routes

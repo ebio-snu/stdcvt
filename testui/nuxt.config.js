@@ -68,17 +68,21 @@ module.exports = {
    */
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
-    '@nuxtjs/axios',
+    //'@nuxtjs/axios',
     // Doc: https://bootstrap-vue.js.org/docs/
     'bootstrap-vue/nuxt'
   ],
 
   /*
    ** Axios module configuration
-   */
   axios: {
-    baseURL: 'http://localhost:2525'
+    proxy: true
   },
+  proxy: {
+    //'/api/stdcvt' : 'http://' + process.env.IP + ':8880/api/stdcvt'
+    '/' : 'http://' + process.env.IP + ':8880'
+  },
+   */
 
   /*
    ** Build configuration
