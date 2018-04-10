@@ -3,7 +3,7 @@
 ## 소개
 샘플노드는 아두이노 나노, LCD, 온습도센서로 구성된다. 
 
-![nodeimage](images/nodeimage.png)
+![node](images/node.jpg)
 
 ## 샘플노드 기능
 다음과 같은 기능을 가지고 있다.

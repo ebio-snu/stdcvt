@@ -65,14 +65,14 @@ sudo apt-get install -y nodejs
 
 * 빌드를 위한 패키지 설치
 ```
-sudo apt install build-essential cmake libgoogle-glog-dev libasio-dev libjansson-dev libgtest-dev
+sudo apt install build-essential cmake libgoogle-glog-dev libboost-all-dev 
 ```
 
 * 소스코드 업데이트 및 빌드
 ```
 cd stdcvt
 git pull
-git submodule 
+git submodule update
 mkdir build
 cd testui
 npm install
