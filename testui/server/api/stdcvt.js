@@ -7,7 +7,7 @@ var fs = require('fs')
 var exec = require('child_process').exec
 
 var pool = mysql.createPool({
-  host: '220.90.136.106',
+  host: '127.0.0.1',
   user: 'ssdriver',
   password: 'sssample',
   database: 'sssample'
