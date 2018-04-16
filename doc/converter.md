@@ -37,50 +37,6 @@ DS드라이버와 SS드라이버는 동일한 드라이버 API에 의해서 연�
 1. (**중요**) Boost::asio를 활용하지 않아도 되지만, 드라이버에서 대기모드로 진입해서는 안된다. (sleep, select 등) 
 1. (**논의**) 개별 드라이버가 내부적으로 별도의 스레드를 돌리거나 통신을 수행하는 별도의 프로세스와 내부통신(공유메모리 등)을 수행한다면 해당 스레드나 프로세스에서 대기모드 진입은 가능하다.
 
-## 컨버터의 설치
-
-컨버터는 최대한 특정OS에 종속되지 않도록 개발하려고 한다. 다만, 현 상태에서 사용성, 개별편의 등을 고려하여 라즈베리파이3를 기본 하드웨어로 하고 Raspbian Stretch를 기본OS로 하여 개발을 진행하고 있다. 컨버터의 설치를 위해 라즈베리파이3 및 Raspbian은 설치가 되어 있다고 가정한다.
-
-### 초기 패키지 업데이트
-```
-sudo apt update
-sudo apt upgrade
-```
-
-### 필요한 패키지의 설치
-* 소스 코드의 획득
-```
-sudo apt install git
-git clone https://github.com/ebio-snu/stdcvt.git
-cd stdcvt
-git submodule init
-git submodule update
-```
-
-* Test UI를 위한 NodeJS
-```
-curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
-
-* 빌드를 위한 패키지 설치
-```
-sudo apt install build-essential cmake libgoogle-glog-dev libasio-dev libjansson-dev libgtest-dev
-```
-
-* 소스코드 업데이트 및 빌드
-```
-cd stdcvt
-git pull
-git submodule 
-mkdir build
-cd testui
-npm install
-cd ../build
-cmake ..
-make
-```
-
 ## 컨버터의 설정
 
 컨버터는 json 파일로 된 설정파일에 의해서 설정이 이루어진다. 설정파일은 ssdriver 와 dsdriver 로 나뉘어지는데 기본적인 구조는 동일하다.
