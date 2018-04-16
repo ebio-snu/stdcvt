@@ -10,7 +10,7 @@
 ```
 sudo apt update
 sudo apt upgrade -y
-curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 sudo apt install -y git buildessential cmake libgoogle-glog-dev libboost-all-dev nodejs libmysqlcppconn-dev mysql-server
 ```
 1. 다음의 명령으로 컨버터 소스를 받는다.
